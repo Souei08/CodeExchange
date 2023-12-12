@@ -1,20 +1,104 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import "react-native-gesture-handler";
+import * as React from "react";
+import * as SplashScreen from "expo-splash-screen";
+import { useFonts } from "expo-font";
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
+import {
+  DrawerContentScrollView,
+  DrawerItem,
+  DrawerItemList,
+  createDrawerNavigator,
+} from "@react-navigation/drawer";
 
-export default function App() {
+// Public Screens
+import LoginScreen from "./app/screens/auth/LoginScreen";
+import RegisterScreen from "./app/screens/auth/RegisterScreen";
+import WelcomeScreen from "./app/screens/auth/WelcomeScreen";
+
+// Authenticated Screens
+import HomeScreen from "./app/screens/HomeScreen";
+import ProfileScreen from "./app/screens/ProfileScreen";
+
+// Custom Components
+import NavigationBar from "./app/components/NavigationBar";
+
+const Stack = createStackNavigator();
+const Drawer = createDrawerNavigator();
+
+SplashScreen.preventAutoHideAsync();
+
+function App() {
+  const isLoggedIn = false;
+
+  const fontKeys = {
+    PoppinsThin: "PoppinsThin",
+    PoppinsRegular: "PoppinsRegular",
+    PoppinsSemiBold: "PoppinsSemiBold",
+    PoppinsBold: "PoppinsBold",
+  };
+
+  const [fontsLoaded, fontError] = useFonts({
+    [fontKeys.PoppinsThin]: require("./assets/fonts/Poppins-Thin.ttf"),
+    [fontKeys.PoppinsRegular]: require("./assets/fonts/Poppins-Regular.ttf"),
+    [fontKeys.PoppinsSemiBold]: require("./assets/fonts/Poppins-SemiBold.ttf"),
+    [fontKeys.PoppinsBold]: require("./assets/fonts/Poppins-Bold.ttf"),
+  });
+
+  const onLayoutRootView = React.useCallback(async () => {
+    if (fontsLoaded || fontError) {
+      await SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded, fontError]);
+
+  if (!fontsLoaded && !fontError) {
+    return null;
+  }
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <NavigationContainer>
+      {isLoggedIn ? (
+        <Stack.Navigator
+          initialRouteName="Login"
+          screenOptions={{
+            header: () => <NavigationBar />,
+          }}
+        >
+          <Stack.Screen name="Welcome" options={{ headerShown: false }}>
+            {(props) => (
+              <WelcomeScreen {...props} onLayoutRootView={onLayoutRootView} />
+            )}
+          </Stack.Screen>
+
+          <Stack.Screen name="Login" options={{ headerShown: false }}>
+            {(props) => (
+              <LoginScreen {...props} onLayoutRootView={onLayoutRootView} />
+            )}
+          </Stack.Screen>
+
+          <Stack.Screen name="Register" options={{ headerShown: false }}>
+            {(props) => (
+              <RegisterScreen {...props} onLayoutRootView={onLayoutRootView} />
+            )}
+          </Stack.Screen>
+        </Stack.Navigator>
+      ) : (
+        <Drawer.Navigator initialRouteName="Home">
+          <Drawer.Screen name="Home">
+            {(props) => (
+              <HomeScreen {...props} onLayoutRootView={onLayoutRootView} />
+            )}
+          </Drawer.Screen>
+
+          <Drawer.Screen name="Profile">
+            {(props) => (
+              <ProfileScreen {...props} onLayoutRootView={onLayoutRootView} />
+            )}
+          </Drawer.Screen>
+        </Drawer.Navigator>
+      )}
+    </NavigationContainer>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+export default App;
