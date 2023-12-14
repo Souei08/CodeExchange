@@ -1,27 +1,26 @@
+// Imports
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, Image } from "react-native";
+
+// Styles
+import profileStyles from "../../assets/css/profile.css";
 
 const ProfileScreen = () => {
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Profile Screen</Text>
-      <Text>This is a basic page structure in React Native with Expo.</Text>
+    <View style={profileStyles.profileContainer}>
+      <View style={profileStyles.profileDetailsContainer}>
+        <Image
+          source={require("../../assets/images/default/defaultProfile.jpg")}
+          style={profileStyles.profilePicture}
+        />
+
+        <Text style={profileStyles.profileName}>Nigga Renzle</Text>
+        <Text style={profileStyles.profileEmail}>nigg@gmail.com</Text>
+      </View>
+
+      <Text style={profileStyles.profileTitle}>Posts</Text>
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    padding: 16,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 16,
-  },
-});
 
 export default ProfileScreen;

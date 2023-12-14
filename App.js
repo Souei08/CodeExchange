@@ -1,15 +1,12 @@
+// Imports
+import { Button, Text, View } from "react-native";
 import "react-native-gesture-handler";
 import * as React from "react";
 import * as SplashScreen from "expo-splash-screen";
 import { useFonts } from "expo-font";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import {
-  DrawerContentScrollView,
-  DrawerItem,
-  DrawerItemList,
-  createDrawerNavigator,
-} from "@react-navigation/drawer";
+import { createDrawerNavigator } from "@react-navigation/drawer";
 
 // Public Screens
 import LoginScreen from "./app/screens/auth/LoginScreen";
@@ -21,7 +18,8 @@ import HomeScreen from "./app/screens/HomeScreen";
 import ProfileScreen from "./app/screens/ProfileScreen";
 
 // Custom Components
-import NavigationBar from "./app/components/NavigationBar";
+import NavigationBar from "./utils/NavigationBar";
+import NavigationDrawer from "./utils/NavigationDrawer";
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -58,12 +56,7 @@ function App() {
   return (
     <NavigationContainer>
       {isLoggedIn ? (
-        <Stack.Navigator
-          initialRouteName="Login"
-          screenOptions={{
-            header: () => <NavigationBar />,
-          }}
-        >
+        <Stack.Navigator initialRouteName="Login">
           <Stack.Screen name="Welcome" options={{ headerShown: false }}>
             {(props) => (
               <WelcomeScreen {...props} onLayoutRootView={onLayoutRootView} />
@@ -83,7 +76,18 @@ function App() {
           </Stack.Screen>
         </Stack.Navigator>
       ) : (
-        <Drawer.Navigator initialRouteName="Home">
+        <Drawer.Navigator
+          initialRouteName="Home"
+          drawerContent={(props) => <NavigationDrawer {...props} />}
+          screenOptions={{
+            drawerStyle: {
+              backgroundColor: "#0C356A",
+            },
+            header: ({ navigation }) => (
+              <NavigationBar navigation={navigation} />
+            ),
+          }}
+        >
           <Drawer.Screen name="Home">
             {(props) => (
               <HomeScreen {...props} onLayoutRootView={onLayoutRootView} />

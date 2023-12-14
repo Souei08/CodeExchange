@@ -1,15 +1,12 @@
 // Imports
 import React from "react";
-import { useNavigation } from "@react-navigation/native";
-import { View, Text, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { View, Text, TouchableOpacity, Image } from "react-native";
 
 // Styles
-import navStyles from "../../assets/css/navigation.css";
+import navStyles from "../assets/css/navigation.css";
 
-const NavigationBar = () => {
-  const navigation = useNavigation();
-
+const NavigationBar = ({ navigation }) => {
   const openDrawer = () => {
     navigation.openDrawer();
   };
@@ -22,7 +19,10 @@ const NavigationBar = () => {
         </TouchableOpacity>
 
         <TouchableOpacity onPress={openDrawer}>
-          <Text>Profile</Text>
+          <Image
+            source={require("../assets/icons/NavigationIcons/hamburger.png")}
+            style={navStyles.navBurger}
+          />
         </TouchableOpacity>
       </View>
     </SafeAreaView>
