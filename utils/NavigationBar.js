@@ -15,7 +15,9 @@ const NavigationBar = ({ navigation }) => {
     <SafeAreaView style={{ backgroundColor: "#0C356A" }}>
       <View style={navStyles.navContainer}>
         <TouchableOpacity onPress={() => navigation.navigate("Home")}>
-          <Text style={navStyles.navLogoName}>CodeExchange</Text>
+          <Text style={navStyles.navLogoName}>
+            Code<Text style={{ color: "#FFCD17" }}>Ideas</Text>
+          </Text>
         </TouchableOpacity>
 
         <TouchableOpacity onPress={openDrawer}>

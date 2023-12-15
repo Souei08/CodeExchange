@@ -4,7 +4,6 @@ import { StyleSheet } from "react-native";
 const profileStyles = StyleSheet.create({
   profileContainer: {
     flex: 1,
-    paddingHorizontal: 40,
     backgroundColor: "#fff",
   },
 
@@ -13,9 +12,13 @@ const profileStyles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     borderWidth: 1,
+    borderColor: "#D9D9D9",
     padding: 20,
     marginVertical: 20,
     borderRadius: 5,
+    paddingHorizontal: 30,
+    paddingVertical: 50,
+    marginHorizontal: 40,
   },
 
   profilePicture: {
@@ -23,7 +26,6 @@ const profileStyles = StyleSheet.create({
     height: 70,
     borderRadius: 100,
     marginRight: 10,
-    marginBottom: 20,
   },
 
   profileName: {
@@ -36,33 +38,17 @@ const profileStyles = StyleSheet.create({
     fontSize: 11,
   },
 
+  profileBios: {
+    marginTop: 20,
+    fontSize: 14,
+    fontFamily: "PoppinsSemiBold",
+  },
+
   profileTitle: {
     fontSize: 18,
     fontFamily: "PoppinsBold",
+    paddingHorizontal: 40,
   },
-
-  //   postsProfileCards: {
-  //     display: "flex",
-  //     justifyContent: "center",
-  //     borderRadius: 5,
-  //     borderColor: "#D9D9D9",
-  //     borderWidth: 2,
-  //     height: 200,
-  //     paddingHorizontal: 30,
-  //     marginVertical: 20,
-  //   },
-
-  //   postsProfileName: {
-  //     fontSize: 18,
-  //     fontFamily: "PoppinsBold",
-  //     marginBottom: 20,
-  //   },
-
-  //   postsProfileParagraph: {
-  //     fontSize: 14,
-  //     marginVertical: 5,
-  //     fontFamily: "PoppinsRegular",
-  //   },
 });
 
 export default profileStyles;

@@ -6,16 +6,33 @@ const authStyles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     backgroundColor: "#0C356A",
-    paddingHorizontal: 60,
+    paddingHorizontal: 50,
+  },
+
+  authLogoContainer: {
+    flex: 0,
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 20,
+  },
+
+  authLogo: {
+    width: 60,
+    height: 60,
+  },
+
+  authLogoText: {
+    fontFamily: "PoppinsBold",
+    fontSize: 32,
+    color: "#fff",
   },
 
   authHeader: {
     fontFamily: "PoppinsBold",
     fontSize: 35,
-    textAlign: "left",
-    marginBottom: 10,
     color: "#fff",
   },
+
   authSubHeader: {
     fontFamily: "PoppinsRegular",
     fontSize: 14,
@@ -26,7 +43,6 @@ const authStyles = StyleSheet.create({
   authParagraph: {
     fontFamily: "PoppinsRegular",
     fontSize: 14,
-    textAlign: "left",
     color: "#fff",
   },
 
@@ -45,8 +61,8 @@ const authStyles = StyleSheet.create({
 
   authButtonContainer: {
     backgroundColor: "#FFCD17",
-    paddingVertical: 10,
-    paddingHorizontal: 20,
+    paddingVertical: 5,
+    paddingHorizontal: 10,
     borderRadius: 4,
     marginTop: 20,
     width: 150,
@@ -57,6 +73,14 @@ const authStyles = StyleSheet.create({
     fontSize: 14,
     textAlign: "center",
     fontFamily: "PoppinsBold",
+  },
+
+  authRegisterText: {
+    fontSize: 14,
+    fontFamily: "PoppinsRegular",
+    textAlign: "center",
+    color: "#fff",
+    marginTop: 20,
   },
 });
 

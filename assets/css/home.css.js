@@ -4,7 +4,7 @@ import { StyleSheet } from "react-native";
 const homeStyles = StyleSheet.create({
   homeContainer: {
     flex: 1,
-    paddingHorizontal: 40,
+    // paddingHorizontal: 40,
     backgroundColor: "#fff",
   },
   homeLogoName: {
@@ -15,9 +15,11 @@ const homeStyles = StyleSheet.create({
   homeTitle: {
     fontSize: 18,
     fontFamily: "PoppinsBold",
+    paddingHorizontal: 40,
   },
 
   homeCreateContainer: {
+    paddingHorizontal: 40,
     marginVertical: 30,
   },
 
@@ -52,11 +54,17 @@ const homeStyles = StyleSheet.create({
     display: "flex",
     justifyContent: "center",
     borderRadius: 5,
-    borderColor: "#D9D9D9",
-    borderWidth: 2,
+    borderColor: "#CCCCCC",
+    borderWidth: 1,
     height: 200,
     paddingHorizontal: 30,
     marginVertical: 20,
+
+    // shadowColor: "#171717",
+    // shadowOffset: { width: -100, height: 4 },
+    // shadowOpacity: 0.2,
+    // shadowRadius: 3,
+    // elevation: 1,
   },
 
   postsName: {

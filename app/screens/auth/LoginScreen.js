@@ -8,6 +8,10 @@ import authStyles from "../../../assets/css/auth.css";
 // Components
 import CustomButton from "../../components/CustomButton";
 
+// Api
+import authApi from "../../../axios/auth";
+import { TouchableOpacity } from "react-native-gesture-handler";
+
 const LoginScreen = ({ navigation, onLayoutRootView }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -27,19 +31,23 @@ const LoginScreen = ({ navigation, onLayoutRootView }) => {
       return false;
     }
 
-    // try {
-    // const userAuthenticated = await authApi.login(username, password);
+    try {
+      const userAuthenticated = await authApi.login(username, password);
 
-    // Alert.alert(userAuthenticated.message);
+      Alert.alert(userAuthenticated.message);
 
-    navigation.navigate("Home");
-    // } catch (error) {
-    //   Alert.alert(error.message);
-    //   return;
-    // }
+      navigation.navigate("Home");
+    } catch (error) {
+      Alert.alert(error.message);
+      return;
+    }
 
     setUsername("");
     setPassword("");
+  };
+
+  const handleNavigateRegister = () => {
+    navigation.navigate("Register");
   };
 
   return (
@@ -79,6 +87,12 @@ const LoginScreen = ({ navigation, onLayoutRootView }) => {
           ]}
           ButtonTextStyle={authStyles.authButtonText}
         />
+
+        <TouchableOpacity onPress={handleNavigateRegister}>
+          <Text style={authStyles.authRegisterText}>
+            Don’t have account? Sign up now.
+          </Text>
+        </TouchableOpacity>
       </View>
     </View>
   );

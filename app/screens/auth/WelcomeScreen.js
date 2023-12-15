@@ -1,6 +1,6 @@
 // Imports
 import React from "react";
-import { View, Text } from "react-native";
+import { View, Text, Image } from "react-native";
 
 // Styles
 import authStyles from "../../../assets/css/auth.css";
@@ -14,11 +14,24 @@ const WelcomeScreen = ({ navigation, onLayoutRootView }) => {
   };
 
   return (
-    <View style={authStyles.authContainer} onLayout={onLayoutRootView}>
-      <Text style={authStyles.authHeader}>Code {"\n"}Exchange</Text>
+    <View
+      style={[authStyles.authContainer, { alignItems: "center" }]}
+      onLayout={onLayoutRootView}
+    >
+      <View style={authStyles.authLogoContainer}>
+        <Image
+          source={require("../../../assets/icons/Logo.png")}
+          style={authStyles.authLogo}
+        />
+        <Text style={authStyles.authLogoText}>
+          Code
+          <Text style={{ color: "#FFCD17" }}> Ideas</Text>
+        </Text>
+      </View>
+
       <Text style={authStyles.authSubHeader}>
-        Discover a community of passionate {"\n"}coders eager to share ideas,
-        solve {"\n"}problems, and collaborate on exciting {"\n"}projects!
+        Discover a community of passionate coders eager to share ideas, solve
+        problems, and collaborate on exciting projects!
       </Text>
 
       <CustomButton
