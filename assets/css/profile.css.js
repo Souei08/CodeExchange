@@ -38,7 +38,7 @@ const profileStyles = StyleSheet.create({
   },
 
   profileBios: {
-    marginTop: 20,
+    marginTop: 30,
     fontSize: 14,
     fontFamily: "PoppinsSemiBold",
   },

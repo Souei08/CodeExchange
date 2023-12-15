@@ -29,6 +29,7 @@ const postStyles = StyleSheet.create({
     fontFamily: "PoppinsSemiBold",
     marginTop: -5,
     color: "#b4b4b4",
+    textDecorationLine: "underline",
   },
 
   postsParagraph: {

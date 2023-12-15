@@ -73,13 +73,17 @@ const ProfileScreen = () => {
             <Text style={profileStyles.profileName}>
               {authUser?.firstName + " " + authUser?.lastName}
             </Text>
-            <Text style={profileStyles.profileEmail}>{authUser?.email}</Text>
+            <Text style={profileStyles.profileEmail}>
+              @{authUser?.username}
+            </Text>
           </View>
         </View>
 
         <Text style={profileStyles.profileBios}>
-          🚀 Learning to turn caffeine into code and errors into experience!💡
+          Learning to turn caffeine into code and errors into experience!💡
         </Text>
+
+        <Text>Total Of Posts</Text>
       </View>
 
       <Text style={profileStyles.profileTitle}>Posts</Text>

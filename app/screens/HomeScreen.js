@@ -84,6 +84,7 @@ const HomeScreen = ({ onLayoutRootView }) => {
       setTags([]);
       setDescription(null);
       closeModal();
+      getPosts();
     } catch (error) {
       Alert.alert(error.message);
       return;
@@ -97,6 +98,12 @@ const HomeScreen = ({ onLayoutRootView }) => {
   return (
     <View style={homeStyles.homeContainer} onLayout={onLayoutRootView}>
       <View style={homeStyles.homeCreateContainer}>
+        <View style={homeStyles.homeHeaderContainer}>
+          <Text style={homeStyles.homeHeaderTitle}>Welcome John Doe</Text>
+          <Text style={homeStyles.homeHeaderSubtitle}>
+            Start posting your ideas now and let the coding adventure begin!
+          </Text>
+        </View>
         <CustomButton
           buttonText={"Create Posts"}
           ButtonTextStyle={homeStyles.homeCreateButtonText}
@@ -158,7 +165,7 @@ const HomeScreen = ({ onLayoutRootView }) => {
 
           <CustomButton
             onPress={handleCreatePost}
-            buttonText={"Create Post"}
+            buttonText={"Create"}
             ButtonTextStyle={homeStyles.homeCreateButtonText}
             buttonContainerStyle={[
               homeStyles.homeCreateButtonContainer,

@@ -48,6 +48,18 @@ const homeStyles = StyleSheet.create({
     textAlign: "center",
     fontFamily: "PoppinsBold",
   },
+
+  homeHeaderContainer: {
+    backgroundColor: "#0C356A",
+  },
+  homeHeaderTitle: {
+    fontSize: 18,
+    fontFamily: "PoppinsSemiBold",
+  },
+  homeHeaderSubtitle: {
+    fontSize: 14,
+    fontFamily: "PoppinsRegular",
+  },
 });
 
 export default homeStyles;

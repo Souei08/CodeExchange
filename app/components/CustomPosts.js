@@ -23,7 +23,11 @@ const CustomPosts = ({ item, handleItemClick, handleHashtagClick }) => {
           <Text style={postStyles.postsName}>
             {item?.owner?.firstName + " " + item?.owner?.lastName}
           </Text>
-          <Text style={postStyles.postsUsername}>@{item?.owner?.username}</Text>
+          <TouchableOpacity>
+            <Text style={postStyles.postsUsername}>
+              @{item?.owner?.username}
+            </Text>
+          </TouchableOpacity>
         </View>
       </View>
 
