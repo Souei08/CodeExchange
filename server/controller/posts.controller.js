@@ -2,7 +2,7 @@ import Posts from "../models/posts.model.js";
 
 export const getPosts = async (req, res) => {
   try {
-    const getPosts = await Posts.find();
+    const getPosts = await Posts.find().populate("owner");
 
     res.status(200).json(getPosts);
   } catch (error) {
@@ -86,7 +86,7 @@ export const getOwnerPost = async (req, res) => {
   try {
     const ownerId = req.params.ownerId;
 
-    const getPosts = await Posts.find({ owner: ownerId });
+    const getPosts = await Posts.find({ owner: ownerId }).populate("owner");
 
     res.status(200).json(getPosts);
   } catch (error) {

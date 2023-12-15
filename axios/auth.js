@@ -1,5 +1,5 @@
 // api/auth.js
-import header from "./context/header";
+import header from "./header";
 import storage from "../utils/storage";
 
 const authApi = {

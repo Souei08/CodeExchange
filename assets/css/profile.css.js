@@ -9,23 +9,20 @@ const profileStyles = StyleSheet.create({
 
   profileDetailsContainer: {
     display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
     borderWidth: 1,
     borderColor: "#D9D9D9",
     padding: 20,
-    marginVertical: 20,
+    marginVertical: 30,
     borderRadius: 5,
     paddingHorizontal: 30,
-    paddingVertical: 50,
     marginHorizontal: 40,
   },
 
   profilePicture: {
     width: 70,
     height: 70,
-    borderRadius: 100,
-    marginRight: 10,
+    borderRadius: 10,
+    marginRight: 20,
   },
 
   profileName: {
@@ -34,8 +31,10 @@ const profileStyles = StyleSheet.create({
   },
 
   profileEmail: {
-    fontFamily: "PoppinsBold",
-    fontSize: 11,
+    fontSize: 14,
+    fontFamily: "PoppinsSemiBold",
+    marginTop: -5,
+    color: "#b4b4b4",
   },
 
   profileBios: {

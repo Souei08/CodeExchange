@@ -1,6 +1,7 @@
 // Imports
 import React, { useState } from "react";
 import { View, Text, TextInput, Alert } from "react-native";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 // Styles
 import authStyles from "../../../assets/css/auth.css";
@@ -8,11 +9,13 @@ import authStyles from "../../../assets/css/auth.css";
 // Components
 import CustomButton from "../../components/CustomButton";
 
-// Api
+// Api And Context
 import authApi from "../../../axios/auth";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import { useAuth } from "../../../context/AuthContext";
 
 const LoginScreen = ({ navigation, onLayoutRootView }) => {
+  const { login } = useAuth();
+
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
@@ -36,7 +39,7 @@ const LoginScreen = ({ navigation, onLayoutRootView }) => {
 
       Alert.alert(userAuthenticated.message);
 
-      navigation.navigate("Home");
+      login();
     } catch (error) {
       Alert.alert(error.message);
       return;

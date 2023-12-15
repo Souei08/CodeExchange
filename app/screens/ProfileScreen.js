@@ -1,43 +1,58 @@
 // Imports
-import React from "react";
-import {
-  View,
-  Text,
-  Image,
-  FlatList,
-  TouchableOpacity,
-  Alert,
-} from "react-native";
+import React, { useEffect, useState } from "react";
+import { View, Text, Image, FlatList, Alert } from "react-native";
 
 // Styles
 import profileStyles from "../../assets/css/profile.css";
-import homeStyles from "../../assets/css/home.css";
+
+// Storage
+import storage from "../../utils/storage";
+
+// Custom Components
+import CustomPosts from "../components/CustomPosts";
+
+// Api
+import postApi from "../../axios/posts";
 
 const ProfileScreen = () => {
-  const DummyTestPosts = Array.from({ length: 20 }, (_, i) => {
-    return {
-      id: i + 1,
-      postOwner: {
-        name: "Renzle Nigga",
-        email: "renzle@gmail.com",
-      },
-      postDetails: `Learned a new programming language.`,
-      postHashtags: ["#Coding", "#HelloWorld"],
-    };
-  });
+  const [authUser, setAuthUser] = useState(null);
+  const [ownerPosts, setOwnerPosts] = useState(null);
+
+  const fetchData = async () => {
+    try {
+      const userAuthenticated = await storage.getAuthUser();
+
+      if (userAuthenticated) {
+        const ownerPosts = await postApi.getOwnerPosts(userAuthenticated._id);
+
+        setAuthUser(userAuthenticated);
+        setOwnerPosts(ownerPosts);
+      } else {
+        console.error("Error: User authentication data is undefined.");
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const handleHashtagClick = (hashtag) => {
+    Alert.alert(`Hashtag Clicked: ${hashtag}`);
+  };
 
   const handleItemClick = (item) => {
-    Alert.alert("Item Clicked", `You clicked on ${item.postOwner.name}`);
+    Alert.alert("Item Clicked", `You clicked on ${item.owner.firstName}`);
   };
 
   const renderItem = ({ item }) => (
-    <View key={item.id} style={homeStyles.postsCards}>
-      <Text style={homeStyles.postsName}>{item.postOwner.name}</Text>
-      <TouchableOpacity onPress={() => handleItemClick(item)}>
-        <Text style={homeStyles.postsParagraph}>{item.postDetails}</Text>
-        <Text style={homeStyles.postsParagraph}>#Coding</Text>
-      </TouchableOpacity>
-    </View>
+    <CustomPosts
+      item={item}
+      handleHashtagClick={handleHashtagClick}
+      handleItemClick={handleItemClick}
+    />
   );
 
   return (
@@ -55,8 +70,10 @@ const ProfileScreen = () => {
             style={profileStyles.profilePicture}
           />
           <View>
-            <Text style={profileStyles.profileName}>Nigga Renzle</Text>
-            <Text style={profileStyles.profileEmail}>nigg@gmail.com</Text>
+            <Text style={profileStyles.profileName}>
+              {authUser?.firstName + " " + authUser?.lastName}
+            </Text>
+            <Text style={profileStyles.profileEmail}>{authUser?.email}</Text>
           </View>
         </View>
 
@@ -67,9 +84,9 @@ const ProfileScreen = () => {
 
       <Text style={profileStyles.profileTitle}>Posts</Text>
       <FlatList
-        data={DummyTestPosts}
+        data={ownerPosts}
         renderItem={renderItem}
-        keyExtractor={(item) => item.id.toString()}
+        keyExtractor={(item) => item._id.toString()}
         numColumns={1}
         style={{
           paddingHorizontal: 40,

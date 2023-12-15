@@ -17,10 +17,9 @@ const storage = {
   getAuthUser: async () => {
     try {
       const auth = await AsyncStorage.getItem(AUTH_USER);
+      const parsedAuth = JSON.parse(auth);
 
-      const userDetails = JSON.parse(auth);
-
-      return userDetails;
+      return parsedAuth;
     } catch (error) {
       console.error("Error getting user:", error);
       return null;

@@ -1,20 +1,39 @@
 // Imports
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Image, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 // Styles
 import drawerStyles from "../assets/css/drawer.css";
+
+// Api And Context
+import { useAuth } from "../context/AuthContext";
 import storage from "./storage";
 
 const NavigationDrawer = ({ navigation }) => {
+  const { logout } = useAuth();
+  const [authUser, setAuthUser] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const user = await storage.getAuthUser();
+        setAuthUser(user);
+      } catch (error) {
+        console.error("Error fetching user:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   const handleNavigation = (screen) => {
     navigation.navigate(screen);
   };
 
   const handleLogout = async () => {
     await storage.clearToken();
-    await navigation.navigate("Home");
+    await logout();
   };
 
   return (
@@ -49,9 +68,11 @@ const NavigationDrawer = ({ navigation }) => {
           />
 
           <View>
-            <Text style={drawerStyles.drawerProfileName}>Renzle Nigga</Text>
+            <Text style={drawerStyles.drawerProfileName}>
+              {authUser?.firstName + " " + authUser?.lastName}
+            </Text>
             <Text style={drawerStyles.drawerProfileEmail}>
-              renzle@gmail.com
+              {authUser?.email}
             </Text>
           </View>
         </View>

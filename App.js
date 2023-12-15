@@ -2,7 +2,7 @@
 import { AuthProvider, useAuth } from "./context/AuthContext";
 
 // Imports
-import React from "react";
+import React, { useEffect } from "react";
 import "react-native-gesture-handler";
 import { useFonts } from "expo-font";
 import { useCallback } from "react";
@@ -24,13 +24,36 @@ import ProfileScreen from "./app/screens/ProfileScreen";
 import NavigationBar from "./utils/NavigationBar";
 import NavigationDrawer from "./utils/NavigationDrawer";
 
-function App() {
-  const { isAuthenticated } = useAuth();
+// Api And Utils
+import authApi from "./axios/auth";
+
+function AppContext() {
+  const { isAuthenticated, login, logout } = useAuth();
 
   const Stack = createStackNavigator();
   const Drawer = createDrawerNavigator();
 
   SplashScreen.preventAutoHideAsync();
+
+  const fetchData = async () => {
+    try {
+      const [userAuthenticated] = await Promise.all([
+        authApi.isAuthenticated(),
+      ]);
+
+      if (userAuthenticated) {
+        login();
+      } else {
+        logout();
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   const fontKeys = {
     PoppinsThin: "PoppinsThin",
@@ -57,60 +80,64 @@ function App() {
   }
 
   return (
-    <AuthProvider>
-      <NavigationContainer>
-        {isAuthenticated ? (
-          <Stack.Navigator initialRouteName="Welcome">
-            <Stack.Screen name="Welcome" options={{ headerShown: false }}>
-              {(props) => (
-                <WelcomeScreen {...props} onLayoutRootView={onLayoutRootView} />
-              )}
-            </Stack.Screen>
+    <NavigationContainer>
+      {!isAuthenticated ? (
+        <Stack.Navigator
+          initialRouteName="Welcome"
+          screenOptions={{ headerShown: false }}
+        >
+          <Stack.Screen name="Welcome">
+            {(props) => (
+              <WelcomeScreen {...props} onLayoutRootView={onLayoutRootView} />
+            )}
+          </Stack.Screen>
 
-            <Stack.Screen name="Login" options={{ headerShown: false }}>
-              {(props) => (
-                <LoginScreen {...props} onLayoutRootView={onLayoutRootView} />
-              )}
-            </Stack.Screen>
+          <Stack.Screen name="Login">
+            {(props) => (
+              <LoginScreen {...props} onLayoutRootView={onLayoutRootView} />
+            )}
+          </Stack.Screen>
 
-            <Stack.Screen name="Register" options={{ headerShown: false }}>
-              {(props) => (
-                <RegisterScreen
-                  {...props}
-                  onLayoutRootView={onLayoutRootView}
-                />
-              )}
-            </Stack.Screen>
-          </Stack.Navigator>
-        ) : (
-          <Drawer.Navigator
-            initialRouteName="Home"
-            drawerContent={(props) => <NavigationDrawer {...props} />}
-            screenOptions={{
-              drawerStyle: {
-                backgroundColor: "#0C356A",
-              },
-              header: ({ navigation }) => (
-                <NavigationBar navigation={navigation} />
-              ),
-            }}
-          >
-            <Drawer.Screen name="Home">
-              {(props) => (
-                <HomeScreen {...props} onLayoutRootView={onLayoutRootView} />
-              )}
-            </Drawer.Screen>
+          <Stack.Screen name="Register">
+            {(props) => (
+              <RegisterScreen {...props} onLayoutRootView={onLayoutRootView} />
+            )}
+          </Stack.Screen>
+        </Stack.Navigator>
+      ) : (
+        <Drawer.Navigator
+          initialRouteName="Home"
+          drawerContent={(props) => <NavigationDrawer {...props} />}
+          screenOptions={{
+            drawerStyle: {
+              backgroundColor: "#0C356A",
+            },
+            header: ({ navigation }) => (
+              <NavigationBar navigation={navigation} />
+            ),
+          }}
+        >
+          <Drawer.Screen name="Home">
+            {(props) => (
+              <HomeScreen {...props} onLayoutRootView={onLayoutRootView} />
+            )}
+          </Drawer.Screen>
 
-            <Drawer.Screen name="Profile">
-              {(props) => (
-                <ProfileScreen {...props} onLayoutRootView={onLayoutRootView} />
-              )}
-            </Drawer.Screen>
-          </Drawer.Navigator>
-        )}
-      </NavigationContainer>
-    </AuthProvider>
+          <Drawer.Screen name="Profile">
+            {(props) => (
+              <ProfileScreen {...props} onLayoutRootView={onLayoutRootView} />
+            )}
+          </Drawer.Screen>
+        </Drawer.Navigator>
+      )}
+    </NavigationContainer>
   );
 }
+
+const App = () => (
+  <AuthProvider>
+    <AppContext />
+  </AuthProvider>
+);
 
 export default App;
