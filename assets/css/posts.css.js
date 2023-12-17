@@ -51,6 +51,55 @@ const postStyles = StyleSheet.create({
     padding: 5,
     borderRadius: 5,
   },
+
+  postInteractionContainer: {
+    marginTop: 30,
+    flexDirection: "row",
+  },
+
+  postInnerInteractionContainer: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    alignContent: "center",
+    marginRight: 30,
+  },
+
+  postInteractionIcons: {
+    width: 25,
+    height: 25,
+    marginRight: 10,
+    marginTop: -3,
+  },
+
+  postInteractionText: {
+    fontFamily: "PoppinsBold",
+    fontSize: 18,
+  },
+
+  postMoreIconContainer: {
+    marginLeft: "auto",
+    alignSelf: "flex-start",
+    marginTop: -18,
+  },
+
+  postMoreIcon: {
+    fontFamily: "PoppinsBold",
+    fontSize: 32,
+  },
+
+  postDetailMainContainer: {
+    flex: 1,
+    paddingHorizontal: 20,
+  },
+
+  postDetailCommentContainer: {
+    flexDirection: "row",
+    paddingHorizontal: 30,
+  },
+
+  postDetailCommentCard: {},
 });
 
 export default postStyles;

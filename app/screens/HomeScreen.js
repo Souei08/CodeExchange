@@ -1,6 +1,7 @@
 //  Imports
 import Tags from "react-native-tags";
 import React, { useEffect, useState } from "react";
+// import { useToast } from "react-native-toast-message";
 import { Alert, FlatList, Text, TextInput, View } from "react-native";
 
 // Styles
@@ -15,11 +16,16 @@ import CustomModal from "../components/CustomModal";
 import postApi from "../../axios/posts";
 import CustomPosts from "../components/CustomPosts";
 
-const HomeScreen = ({ onLayoutRootView }) => {
+// Utils
+import storage from "../../utils/storage";
+
+const HomeScreen = ({ navigation, onLayoutRootView }) => {
+  // const toast = useToast();
+
   const [isModalVisible, setModalVisible] = useState(false);
   const [posts, setPosts] = useState(null);
+  const [authUser, setAuthUser] = useState([]);
 
-  // Values
   const [tags, setTags] = useState([]);
   const [description, setDescription] = useState(null);
 
@@ -41,6 +47,11 @@ const HomeScreen = ({ onLayoutRootView }) => {
     }
   };
 
+  const getAuthUser = async () => {
+    const authUser = await storage.getAuthUser();
+    setAuthUser(authUser);
+  };
+
   const handleTagPress = (index, tagLabel, event, deleted) => {
     console.log(index, tagLabel, event, deleted);
   };
@@ -51,33 +62,31 @@ const HomeScreen = ({ onLayoutRootView }) => {
 
   useEffect(() => {
     getPosts();
+    getAuthUser();
   }, []);
-
-  const handleHashtagClick = (hashtag) => {
-    Alert.alert(`Hashtag Clicked: ${hashtag}`);
-  };
-
-  const handleItemClick = (item) => {
-    Alert.alert("Item Clicked", `You clicked on ${item.owner.firstName}`);
-  };
 
   const renderItem = ({ item }) => (
     <CustomPosts
       item={item}
-      handleHashtagClick={handleHashtagClick}
-      handleItemClick={handleItemClick}
+      type={"home"}
+      navigation={navigation}
+      getPosts={getPosts}
+      loginUser={authUser}
     />
   );
 
   const handleCreatePost = async () => {
     if (!description || tags.length === 0) {
-      Alert.alert("Please provide email and password");
+      // toast.show({
+      //   type: "success",
+      //   text1: "Please provide email and password",
+      // });
 
       return false;
     }
 
     try {
-      const userAuthenticated = await postApi.createProducts(description, tags);
+      const userAuthenticated = await postApi.createPosts(description, tags);
 
       Alert.alert(userAuthenticated.message);
 
@@ -99,20 +108,20 @@ const HomeScreen = ({ onLayoutRootView }) => {
     <View style={homeStyles.homeContainer} onLayout={onLayoutRootView}>
       <View style={homeStyles.homeCreateContainer}>
         <View style={homeStyles.homeHeaderContainer}>
-          <Text style={homeStyles.homeHeaderTitle}>Welcome John Doe</Text>
+          <Text style={homeStyles.homeHeaderTitle}>
+            Welcome, {authUser.firstName} {authUser.lastName}
+          </Text>
           <Text style={homeStyles.homeHeaderSubtitle}>
             Start posting your ideas now and let the coding adventure begin!
           </Text>
+
+          <CustomButton
+            buttonText={"Create Posts"}
+            ButtonTextStyle={homeStyles.homeCreateButtonText}
+            buttonContainerStyle={homeStyles.homeCreateButtonContainer}
+            onPress={openModal}
+          />
         </View>
-        <CustomButton
-          buttonText={"Create Posts"}
-          ButtonTextStyle={homeStyles.homeCreateButtonText}
-          buttonContainerStyle={[
-            homeStyles.homeCreateButtonContainer,
-            { alignSelf: "flex-end" },
-          ]}
-          onPress={openModal}
-        />
 
         <CustomModal isVisible={isModalVisible} closeModal={closeModal}>
           <Text
@@ -165,7 +174,7 @@ const HomeScreen = ({ onLayoutRootView }) => {
 
           <CustomButton
             onPress={handleCreatePost}
-            buttonText={"Create"}
+            buttonText={"Post"}
             ButtonTextStyle={homeStyles.homeCreateButtonText}
             buttonContainerStyle={[
               homeStyles.homeCreateButtonContainer,
@@ -175,7 +184,7 @@ const HomeScreen = ({ onLayoutRootView }) => {
         </CustomModal>
       </View>
 
-      <Text style={homeStyles.homeTitle}>Ideas</Text>
+      <Text style={homeStyles.homeTitle}>Posts</Text>
 
       <FlatList
         data={posts}

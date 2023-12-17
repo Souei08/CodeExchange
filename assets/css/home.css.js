@@ -36,7 +36,7 @@ const homeStyles = StyleSheet.create({
 
   homeCreateButtonContainer: {
     backgroundColor: "#FFCD17",
-    paddingVertical: 8,
+    paddingVertical: 5,
     paddingHorizontal: 8,
     borderRadius: 4,
     width: 130,
@@ -51,14 +51,20 @@ const homeStyles = StyleSheet.create({
 
   homeHeaderContainer: {
     backgroundColor: "#0C356A",
+    padding: 20,
+    borderRadius: 6,
   },
   homeHeaderTitle: {
     fontSize: 18,
     fontFamily: "PoppinsSemiBold",
+    color: "#fff",
+    marginBottom: 10,
   },
   homeHeaderSubtitle: {
     fontSize: 14,
     fontFamily: "PoppinsRegular",
+    color: "#fff",
+    marginBottom: 15,
   },
 });
 

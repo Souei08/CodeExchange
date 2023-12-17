@@ -1,7 +1,24 @@
 import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
-const postSchema = mongoose.Schema(
+const commentSchema = new Schema(
+  {
+    user: {
+      type: Schema.Types.ObjectId,
+      ref: "Users",
+      required: true,
+    },
+    comment: {
+      type: String,
+      required: true,
+    },
+  },
+  {
+    timestamps: true,
+  }
+);
+
+const postSchema = new Schema(
   {
     description: {
       type: String,
@@ -19,6 +36,7 @@ const postSchema = mongoose.Schema(
         },
       },
     ],
+    comments: [commentSchema],
     images: {
       type: String,
     },

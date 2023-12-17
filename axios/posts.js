@@ -5,7 +5,7 @@ import header from "./header";
 const postApi = {
   getAllPosts: async () => {
     try {
-      const response = await header.get("/products");
+      const response = await header.get("/posts");
 
       return response.data;
     } catch (error) {
@@ -13,7 +13,7 @@ const postApi = {
     }
   },
 
-  createProducts: async (description, tags) => {
+  createPosts: async (description, tags) => {
     try {
       const authUser = await storage.getAuthUser();
 
@@ -25,7 +25,7 @@ const postApi = {
 
       console.log(data);
 
-      const response = await header.post("/products/create", data);
+      const response = await header.post("/posts/create", data);
 
       return response.data;
     } catch (error) {
@@ -36,11 +36,56 @@ const postApi = {
 
   getOwnerPosts: async (id) => {
     try {
-      const response = await header.get(`/products/owner/${id}`);
+      const response = await header.get(`/posts/owner/${id}`);
 
       return response.data;
     } catch (error) {
       console.log(error);
+      throw error;
+    }
+  },
+
+  likePost: async (postId) => {
+    try {
+      const authUser = await storage.getAuthUser();
+
+      const response = await header.post(`/posts/${postId}/like`, {
+        userId: authUser._id,
+      });
+
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  commentPost: async (postId, data) => {
+    try {
+      const authUser = await storage.getAuthUser();
+      const finalData = {
+        comment: data.comment,
+        owner: authUser._id,
+      };
+
+      const response = await header.post(
+        `/posts/${postId}/comments`,
+        finalData
+      );
+
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  deleteComment: async (postId, commentId) => {
+    try {
+      const response = await header.delete(
+        `/posts/${postId}/comments/${commentId}`
+      );
+
+      return response.data;
+    } catch (error) {
       throw error;
     }
   },

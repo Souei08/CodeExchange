@@ -85,6 +85,7 @@ const RegisterScreen = ({ navigation, onLayoutRootView }) => {
         { id: "4", placeholder: "Email", value: "", key: "email" },
       ]);
     } catch (error) {
+      console.log(error);
       Alert.alert(error.message);
       return;
     }

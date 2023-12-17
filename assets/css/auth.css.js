@@ -11,14 +11,15 @@ const authStyles = StyleSheet.create({
 
   authLogoContainer: {
     flex: 0,
-    flexDirection: "row",
+    flexDirection: "column",
     alignItems: "center",
     marginBottom: 20,
   },
 
   authLogo: {
-    width: 60,
-    height: 60,
+    width: 80,
+    height: 80,
+    marginBottom: 10,
   },
 
   authLogoText: {
@@ -36,8 +37,9 @@ const authStyles = StyleSheet.create({
   authSubHeader: {
     fontFamily: "PoppinsRegular",
     fontSize: 14,
-    textAlign: "left",
+    textAlign: "center",
     color: "#fff",
+    marginBottom: 15,
   },
 
   authParagraph: {

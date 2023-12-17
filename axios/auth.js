@@ -15,6 +15,7 @@ const authApi = {
 
       return response.data;
     } catch (error) {
+      console.log(error.message);
       throw error;
     }
   },
@@ -32,8 +33,14 @@ const authApi = {
 
       return response.data;
     } catch (error) {
-      console.log(error);
-      throw error;
+      if (error.response && error.response.status === 400) {
+        const errorMessage = error.response.data.message;
+        console.log(errorMessage);
+        throw new Error(errorMessage);
+      } else {
+        console.error(error);
+        throw error;
+      }
     }
   },
 

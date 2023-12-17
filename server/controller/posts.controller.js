@@ -95,3 +95,77 @@ export const getOwnerPost = async (req, res) => {
     });
   }
 };
+
+export const likePost = async (req, res) => {
+  const { postId } = req.params;
+  const { userId } = req.body;
+
+  try {
+    const post = await Posts.findById(postId);
+
+    const alreadyLikedIndex = post.likes.findIndex(
+      (like) => like.user.toString() === userId
+    );
+
+    if (alreadyLikedIndex !== -1) {
+      post.likes.splice(alreadyLikedIndex, 1);
+      await post.save();
+      return res.json({ message: "Post unliked successfully" });
+    } else {
+      post.likes.push({ user: userId });
+      await post.save();
+      return res.json({ message: "Post liked successfully" });
+    }
+  } catch (error) {
+    console.error("Error liking/unliking post:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const commentPost = async (req, res) => {
+  const { postId } = req.params;
+  const { userId, comment } = req.body;
+
+  try {
+    const post = await Posts.findById(postId);
+
+    const newComment = {
+      user: userId,
+      comment,
+    };
+
+    post.comments.push(newComment);
+
+    await post.save();
+
+    res.status(201).json(newComment);
+  } catch (error) {
+    console.error("Error adding comment:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const deleteComment = async (req, res) => {
+  const { postId, commentId } = req.params;
+
+  try {
+    const post = await Posts.findById(postId);
+
+    const commentIndex = post.comments.findIndex(
+      (comment) => comment._id == commentId
+    );
+
+    if (commentIndex !== -1) {
+      post.comments.splice(commentIndex, 1);
+
+      await post.save();
+
+      res.status(200).json({ message: "Comment deleted successfully" });
+    } else {
+      res.status(404).json({ message: "Comment not found" });
+    }
+  } catch (error) {
+    console.error("Error deleting comment:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};

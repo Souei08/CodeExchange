@@ -4,7 +4,7 @@ import mongoose from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
 
-import productRoutes from "./routes/products.js";
+import postRoutes from "./routes/posts.js";
 import userRoutes from "./routes/users.js";
 import authMiddleware from "./middleware/authenticated.middleware.js";
 
@@ -19,7 +19,7 @@ app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
 
 app.use(cors());
 
-app.use("/products", authMiddleware.verifyToken, productRoutes);
+app.use("/posts", authMiddleware.verifyToken, postRoutes);
 app.use("/users", userRoutes);
 
 const CONNECTION_URL = mongoAtlasURI;

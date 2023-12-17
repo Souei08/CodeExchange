@@ -14,19 +14,25 @@ import CustomPosts from "../components/CustomPosts";
 // Api
 import postApi from "../../axios/posts";
 
+// Context
+import { useAuth } from "../../context/AuthContext";
+
 const ProfileScreen = () => {
-  const [authUser, setAuthUser] = useState(null);
+  const { visitUser } = useAuth();
   const [ownerPosts, setOwnerPosts] = useState(null);
+  const [isEditable, setIsEditable] = useState(null);
 
   const fetchData = async () => {
     try {
       const userAuthenticated = await storage.getAuthUser();
 
-      if (userAuthenticated) {
-        const ownerPosts = await postApi.getOwnerPosts(userAuthenticated._id);
+      if (userAuthenticated || visitUser) {
+        const ownerPosts = await postApi.getOwnerPosts(visitUser._id);
 
-        setAuthUser(userAuthenticated);
         setOwnerPosts(ownerPosts);
+        if (visitUser._id === userAuthenticated._id) {
+          setIsEditable(true);
+        }
       } else {
         console.error("Error: User authentication data is undefined.");
       }
@@ -37,7 +43,7 @@ const ProfileScreen = () => {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [visitUser]);
 
   const handleHashtagClick = (hashtag) => {
     Alert.alert(`Hashtag Clicked: ${hashtag}`);
@@ -52,6 +58,9 @@ const ProfileScreen = () => {
       item={item}
       handleHashtagClick={handleHashtagClick}
       handleItemClick={handleItemClick}
+      allowEdit={isEditable}
+      loginUser={visitUser}
+      getPosts={fetchData}
     />
   );
 
@@ -71,10 +80,10 @@ const ProfileScreen = () => {
           />
           <View>
             <Text style={profileStyles.profileName}>
-              {authUser?.firstName + " " + authUser?.lastName}
+              {visitUser?.firstName + " " + visitUser?.lastName}
             </Text>
             <Text style={profileStyles.profileEmail}>
-              @{authUser?.username}
+              @{visitUser?.username}
             </Text>
           </View>
         </View>

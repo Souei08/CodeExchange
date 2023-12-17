@@ -48,6 +48,22 @@ const profileStyles = StyleSheet.create({
     fontFamily: "PoppinsBold",
     paddingHorizontal: 40,
   },
+
+  profilePostCountContainer: {
+    display: "flex",
+    flexDirection: "row",
+    marginTop: 20,
+    paddingVertical: 5,
+    paddingHorizontal: 15,
+    backgroundColor: "#FFCD17",
+    width: "50%",
+  },
+
+  profilePostCountText: {
+    fontFamily: "PoppinsBold",
+    color: "#000",
+    fontSize: 18,
+  },
 });
 
 export default profileStyles;

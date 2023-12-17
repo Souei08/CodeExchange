@@ -11,7 +11,7 @@ import { useAuth } from "../context/AuthContext";
 import storage from "./storage";
 
 const NavigationDrawer = ({ navigation }) => {
-  const { logout } = useAuth();
+  const { logout, setUserVisit } = useAuth();
   const [authUser, setAuthUser] = useState(null);
 
   useEffect(() => {
@@ -29,6 +29,11 @@ const NavigationDrawer = ({ navigation }) => {
 
   const handleNavigation = (screen) => {
     navigation.navigate(screen);
+  };
+
+  const handleNavigateProfile = async (screen) => {
+    await setUserVisit(authUser);
+    await navigation.navigate(screen);
   };
 
   const handleLogout = async () => {
@@ -52,9 +57,15 @@ const NavigationDrawer = ({ navigation }) => {
           </Text>
           <Text
             style={drawerStyles.drawerNavs}
-            onPress={() => handleNavigation("Profile")}
+            onPress={() => handleNavigateProfile("Profile")}
           >
             Profile
+          </Text>
+          <Text
+            style={drawerStyles.drawerNavs}
+            onPress={() => handleNavigation("Search")}
+          >
+            Search
           </Text>
           <Text style={drawerStyles.drawerNavs} onPress={handleLogout}>
             Logout

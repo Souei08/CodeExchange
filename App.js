@@ -7,6 +7,7 @@ import "react-native-gesture-handler";
 import { useFonts } from "expo-font";
 import { useCallback } from "react";
 import * as SplashScreen from "expo-splash-screen";
+// import { ToastProvider } from "react-native-toast-message";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createDrawerNavigator } from "@react-navigation/drawer";
@@ -19,13 +20,15 @@ import WelcomeScreen from "./app/screens/auth/WelcomeScreen";
 // Authenticated Screens
 import HomeScreen from "./app/screens/HomeScreen";
 import ProfileScreen from "./app/screens/ProfileScreen";
+import PostDetailScreen from "./app/screens/PostDetailsScreen";
+
+// Api And Utils
+import authApi from "./axios/auth";
 
 // Custom Components
 import NavigationBar from "./utils/NavigationBar";
 import NavigationDrawer from "./utils/NavigationDrawer";
-
-// Api And Utils
-import authApi from "./axios/auth";
+// import CustomToast from "./app/components/CustomToast";
 
 function AppContext() {
   const { isAuthenticated, login, logout } = useAuth();
@@ -123,6 +126,15 @@ function AppContext() {
             )}
           </Drawer.Screen>
 
+          <Drawer.Screen name="PostDetail">
+            {(props) => (
+              <PostDetailScreen
+                {...props}
+                onLayoutRootView={onLayoutRootView}
+              />
+            )}
+          </Drawer.Screen>
+
           <Drawer.Screen name="Profile">
             {(props) => (
               <ProfileScreen {...props} onLayoutRootView={onLayoutRootView} />
@@ -136,7 +148,13 @@ function AppContext() {
 
 const App = () => (
   <AuthProvider>
+    {/* <ToastProvider
+      config={{
+        success: ({ text1 }) => <CustomToast message={text1} />,
+      }}
+    > */}
     <AppContext />
+    {/* </ToastProvider> */}
   </AuthProvider>
 );
 

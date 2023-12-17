@@ -24,8 +24,8 @@ const WelcomeScreen = ({ navigation, onLayoutRootView }) => {
           style={authStyles.authLogo}
         />
         <Text style={authStyles.authLogoText}>
-          Code
-          <Text style={{ color: "#FFCD17" }}> Ideas</Text>
+          CODE
+          <Text style={{ color: "#FFCD17" }}> IDEAS</Text>
         </Text>
       </View>
 

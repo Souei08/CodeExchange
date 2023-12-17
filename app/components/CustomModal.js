@@ -1,5 +1,9 @@
+// Imports
 import React from "react";
-import { View, Text, Modal, TouchableOpacity, StyleSheet } from "react-native";
+import { View, Text, Modal, TouchableOpacity } from "react-native";
+
+// Styles
+import modalStyles from "../../assets/css/modal.css";
 
 const CustomModal = ({ isVisible, closeModal, children }) => {
   return (
@@ -9,9 +13,10 @@ const CustomModal = ({ isVisible, closeModal, children }) => {
       visible={isVisible}
       onRequestClose={closeModal}
     >
-      <View style={styles.modalContainer}>
-        <View style={styles.modalContent}>
+      <View style={modalStyles.modalContainer}>
+        <View style={modalStyles.modalContent}>
           <TouchableOpacity
+            smodalStyles
             onPress={closeModal}
             style={{
               alignSelf: "flex-end",
@@ -31,21 +36,5 @@ const CustomModal = ({ isVisible, closeModal, children }) => {
     </Modal>
   );
 };
-
-const styles = StyleSheet.create({
-  modalContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
-    height: "100%",
-  },
-  modalContent: {
-    width: "80%",
-    backgroundColor: "#0C356A",
-    padding: 20,
-    borderRadius: 10,
-  },
-});
 
 export default CustomModal;
