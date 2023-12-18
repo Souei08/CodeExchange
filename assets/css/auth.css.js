@@ -54,10 +54,11 @@ const authStyles = StyleSheet.create({
     paddingLeft: 15,
     borderColor: "#fff",
     borderWidth: 1,
-    fontSize: 15,
+    fontSize: 14,
     marginBottom: 20,
     height: 40,
     color: "#fff",
+    margin: 5,
     fontFamily: "PoppinsRegular",
   },
 

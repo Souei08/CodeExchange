@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { View, TouchableOpacity, Text, StyleSheet } from "react-native";
 import Modal from "react-native-modal";
 
-const MoreDropdown = ({ options, text, textStyle }) => {
+const MoreDropdown = ({ options, text, textStyle, editModal, deleteModal }) => {
   const [isModalVisible, setModalVisible] = useState(false);
 
   const toggleModal = () => {
@@ -11,8 +11,13 @@ const MoreDropdown = ({ options, text, textStyle }) => {
   };
 
   const handleOptionClick = (option) => {
-    console.log(`Clicked on option: ${option}`);
-    toggleModal();
+    if (option === "Edit") {
+      editModal();
+      toggleModal();
+    } else {
+      deleteModal();
+      toggleModal();
+    }
   };
 
   return (

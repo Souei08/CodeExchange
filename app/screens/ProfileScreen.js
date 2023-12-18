@@ -1,6 +1,13 @@
 // Imports
 import React, { useEffect, useState } from "react";
-import { View, Text, Image, FlatList, Alert } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  FlatList,
+  Alert,
+  TouchableOpacity,
+} from "react-native";
 
 // Styles
 import profileStyles from "../../assets/css/profile.css";
@@ -10,6 +17,7 @@ import storage from "../../utils/storage";
 
 // Custom Components
 import CustomPosts from "../components/CustomPosts";
+import CustomUpdateUserModal from "../components/CustomUpdateUserModal";
 
 // Api
 import postApi from "../../axios/posts";
@@ -17,10 +25,18 @@ import postApi from "../../axios/posts";
 // Context
 import { useAuth } from "../../context/AuthContext";
 
-const ProfileScreen = () => {
+const ProfileScreen = ({ navigation }) => {
   const { visitUser } = useAuth();
   const [ownerPosts, setOwnerPosts] = useState(null);
-  const [isEditable, setIsEditable] = useState(null);
+  const [updateModalProf, setUpdateModalProf] = useState(false);
+
+  const isModalUpdateProf = () => {
+    setUpdateModalProf(true);
+  };
+
+  const closeModalUpdateProf = () => {
+    setUpdateModalProf(false);
+  };
 
   const fetchData = async () => {
     try {
@@ -30,9 +46,6 @@ const ProfileScreen = () => {
         const ownerPosts = await postApi.getOwnerPosts(visitUser._id);
 
         setOwnerPosts(ownerPosts);
-        if (visitUser._id === userAuthenticated._id) {
-          setIsEditable(true);
-        }
       } else {
         console.error("Error: User authentication data is undefined.");
       }
@@ -58,7 +71,7 @@ const ProfileScreen = () => {
       item={item}
       handleHashtagClick={handleHashtagClick}
       handleItemClick={handleItemClick}
-      allowEdit={isEditable}
+      navigation={navigation}
       loginUser={visitUser}
       getPosts={fetchData}
     />
@@ -86,13 +99,15 @@ const ProfileScreen = () => {
               @{visitUser?.username}
             </Text>
           </View>
+
+          <TouchableOpacity onPress={isModalUpdateProf}>
+            <Text>Edit</Text>
+          </TouchableOpacity>
         </View>
 
         <Text style={profileStyles.profileBios}>
           Learning to turn caffeine into code and errors into experience!💡
         </Text>
-
-        <Text>Total Of Posts</Text>
       </View>
 
       <Text style={profileStyles.profileTitle}>Posts</Text>
@@ -104,6 +119,12 @@ const ProfileScreen = () => {
         style={{
           paddingHorizontal: 40,
         }}
+      />
+
+      <CustomUpdateUserModal
+        updateModalProf={updateModalProf}
+        closeModalUpdateProf={closeModalUpdateProf}
+        user={visitUser}
       />
     </View>
   );

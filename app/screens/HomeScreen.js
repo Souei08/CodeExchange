@@ -68,7 +68,6 @@ const HomeScreen = ({ navigation, onLayoutRootView }) => {
   const renderItem = ({ item }) => (
     <CustomPosts
       item={item}
-      type={"home"}
       navigation={navigation}
       getPosts={getPosts}
       loginUser={authUser}
@@ -79,7 +78,7 @@ const HomeScreen = ({ navigation, onLayoutRootView }) => {
     if (!description || tags.length === 0) {
       // toast.show({
       //   type: "success",
-      //   text1: "Please provide email and password",
+      //   text1: "Please provide description to your post.",
       // });
 
       return false;

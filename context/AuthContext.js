@@ -8,6 +8,7 @@ export const AuthProvider = ({ children }) => {
   const [authUser, setAuthUser] = useState(null);
   const [visitUser, setUserVisit] = useState(null);
   const [visitPost, setVisitPost] = useState(null);
+  const [searchValue, setSearchValue] = useState(null);
 
   const login = () => {
     setIsAuthenticated(true);
@@ -24,11 +25,13 @@ export const AuthProvider = ({ children }) => {
         authUser,
         visitUser,
         visitPost,
+        searchValue,
         login,
         logout,
         setAuthUser,
         setUserVisit,
         setVisitPost,
+        setSearchValue,
       }}
     >
       {children}

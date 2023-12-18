@@ -4,7 +4,7 @@ import { StyleSheet } from "react-native";
 const profileStyles = StyleSheet.create({
   profileContainer: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "#F7FAFF",
   },
 
   profileDetailsContainer: {
@@ -14,8 +14,8 @@ const profileStyles = StyleSheet.create({
     padding: 20,
     marginVertical: 30,
     borderRadius: 5,
-    paddingHorizontal: 30,
     marginHorizontal: 40,
+    backgroundColor: "#fff",
   },
 
   profilePicture: {
@@ -63,6 +63,28 @@ const profileStyles = StyleSheet.create({
     fontFamily: "PoppinsBold",
     color: "#000",
     fontSize: 18,
+  },
+
+  profileEditImageContainer: {
+    position: "relative",
+    alignSelf: "center",
+  },
+
+  profileIconContainer: {
+    position: "absolute",
+    top: 0,
+    right: -10,
+    zIndex: 1,
+    backgroundColor: "transparent",
+    backgroundColor: "red",
+    borderRadius: 100,
+    padding: 5,
+  },
+  profileEditImage: {
+    width: 100,
+    height: 100,
+    borderRadius: 10,
+    marginBottom: 20,
   },
 });
 

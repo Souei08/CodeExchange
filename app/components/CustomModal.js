@@ -12,6 +12,7 @@ const CustomModal = ({ isVisible, closeModal, children }) => {
       transparent={true}
       visible={isVisible}
       onRequestClose={closeModal}
+      onBackdropPress={closeModal}
     >
       <View style={modalStyles.modalContainer}>
         <View style={modalStyles.modalContent}>

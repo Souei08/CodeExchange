@@ -3,7 +3,7 @@ import axios from "axios";
 import storage from "../utils/storage";
 
 const headers = axios.create({
-  baseURL: "http:///192.168.1.74:5000",
+  baseURL: "http:///192.168.1.23:5000",
 });
 
 headers.interceptors.request.use(

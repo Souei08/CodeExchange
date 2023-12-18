@@ -1,11 +1,14 @@
 // Imports
-import React from "react";
-import { View, Text, TouchableOpacity, Image, Alert } from "react-native";
+import React, { useState } from "react";
+import { View, Text, TouchableOpacity, Image } from "react-native";
 
 // Styles
 import postStyles from "../../assets/css/posts.css";
+import homeStyles from "../../assets/css/home.css";
 
 // Custom Components
+import CustomModal from "./CustomModal";
+import CustomButton from "./CustomButton";
 import MoreDropdown from "./CustomMoreDropdown";
 
 // Context
@@ -14,16 +17,31 @@ import { useAuth } from "../../context/AuthContext";
 // Api
 import postApi from "../../axios/posts";
 
-const CustomPosts = ({
-  item,
-  type,
-  navigation,
-  allowEdit,
-  getPosts,
-  loginUser,
-}) => {
-  const { setUserVisit, setVisitPost } = useAuth();
+// Utils
+import { removeSpecialCharacters } from "../../utils/Utility";
+
+const CustomPosts = ({ item, navigation, getPosts, loginUser }) => {
+  const [isModalEdit, setModalEdit] = useState(false);
+  const [isModalDelete, setModalDelete] = useState(false);
+
+  const { setUserVisit, setVisitPost, setSearchValue } = useAuth();
   const options = ["Edit", "Delete"];
+
+  const openModalEdit = () => {
+    setModalEdit(true);
+  };
+
+  const closeModalEdit = () => {
+    setModalEdit(false);
+  };
+
+  const openModalDelete = () => {
+    setModalDelete(true);
+  };
+
+  const closeModalDelete = () => {
+    setModalDelete(false);
+  };
 
   const handleVisitUser = async (item) => {
     await setUserVisit(item.owner);
@@ -35,8 +53,10 @@ const CustomPosts = ({
     getPosts();
   };
 
-  const handleHashtagClick = (hashtag) => {
-    Alert.alert(`Hashtag Clicked: ${hashtag}`);
+  const handleHashtagClick = async (hashtag) => {
+    const result = removeSpecialCharacters(hashtag);
+    await setSearchValue(result);
+    await navigation.navigate("Search");
   };
 
   const handleItemClick = async (item) => {
@@ -76,17 +96,17 @@ const CustomPosts = ({
             </Text>
           </TouchableOpacity>
         </View>
-        {type === "profile" &&
-          allowEdit !== undefined &&
-          allowEdit === true && (
-            <Text style={postStyles.postMoreIconContainer}>
-              <MoreDropdown
-                options={options}
-                text={"..."}
-                textStyle={postStyles.postMoreIcon}
-              />
-            </Text>
-          )}
+        {loginUser._id === item.owner._id && (
+          <Text style={postStyles.postMoreIconContainer}>
+            <MoreDropdown
+              options={options}
+              text={"..."}
+              textStyle={postStyles.postMoreIcon}
+              editModal={openModalEdit}
+              deleteModal={openModalDelete}
+            />
+          </Text>
+        )}
       </View>
 
       <TouchableOpacity onPress={() => handleItemClick(item)}>
@@ -140,6 +160,54 @@ const CustomPosts = ({
           </View>
         </TouchableOpacity>
       </View>
+
+      <CustomModal isVisible={isModalEdit} closeModal={closeModalEdit}>
+        <Text
+          style={{
+            textAlign: "center",
+            fontFamily: "PoppinsBold",
+            color: "#fff",
+            fontSize: 18,
+            marginBottom: 20,
+          }}
+        >
+          Update Post
+        </Text>
+
+        <CustomButton
+          // onPress={handleCreatePost}
+          buttonText={"Post"}
+          ButtonTextStyle={homeStyles.homeCreateButtonText}
+          buttonContainerStyle={[
+            homeStyles.homeCreateButtonContainer,
+            { width: "100%", marginBottom: 30 },
+          ]}
+        />
+      </CustomModal>
+
+      <CustomModal isVisible={isModalDelete} closeModal={closeModalDelete}>
+        <Text
+          style={{
+            textAlign: "center",
+            fontFamily: "PoppinsBold",
+            color: "#fff",
+            fontSize: 18,
+            marginBottom: 20,
+          }}
+        >
+          Delete Post
+        </Text>
+
+        <CustomButton
+          // onPress={handleCreatePost}
+          buttonText={"Post"}
+          ButtonTextStyle={homeStyles.homeCreateButtonText}
+          buttonContainerStyle={[
+            homeStyles.homeCreateButtonContainer,
+            { width: "100%", marginBottom: 30 },
+          ]}
+        />
+      </CustomModal>
     </View>
   );
 };

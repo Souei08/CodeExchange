@@ -20,6 +20,7 @@ import WelcomeScreen from "./app/screens/auth/WelcomeScreen";
 // Authenticated Screens
 import HomeScreen from "./app/screens/HomeScreen";
 import ProfileScreen from "./app/screens/ProfileScreen";
+import SearchScreen from "./app/screens/SearchScreen";
 import PostDetailScreen from "./app/screens/PostDetailsScreen";
 
 // Api And Utils
@@ -132,6 +133,12 @@ function AppContext() {
                 {...props}
                 onLayoutRootView={onLayoutRootView}
               />
+            )}
+          </Drawer.Screen>
+
+          <Drawer.Screen name="Search">
+            {(props) => (
+              <SearchScreen {...props} onLayoutRootView={onLayoutRootView} />
             )}
           </Drawer.Screen>
 

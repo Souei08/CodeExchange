@@ -8,8 +8,9 @@ const postStyles = StyleSheet.create({
     borderRadius: 5,
     borderColor: "#CCCCCC",
     borderWidth: 1,
-    padding: 30,
+    padding: 20,
     marginVertical: 20,
+    backgroundColor: "#fff",
   },
 
   postsOwnerProfile: {
@@ -86,7 +87,7 @@ const postStyles = StyleSheet.create({
 
   postMoreIcon: {
     fontFamily: "PoppinsBold",
-    fontSize: 32,
+    fontSize: 25,
   },
 
   postDetailMainContainer: {
@@ -95,11 +96,62 @@ const postStyles = StyleSheet.create({
   },
 
   postDetailCommentContainer: {
+    display: "flex",
     flexDirection: "row",
-    paddingHorizontal: 30,
+    justifyContent: "center",
+    alignContent: "center",
+    alignItems: "center",
+    paddingHorizontal: 10,
+    marginTop: 20,
   },
 
-  postDetailCommentCard: {},
+  postDetailCommentCard: {
+    flex: 1,
+    borderRadius: 5,
+    borderColor: "#CCCCCC",
+    backgroundColor: "#fff",
+    borderWidth: 1,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+  },
+
+  postDetailCommentText: {
+    fontFamily: "PoppinsRegular",
+    fontSize: 14,
+  },
+
+  postDetailSendContainer: {
+    position: "absolute",
+    bottom: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: "#fff",
+    borderTopWidth: 1,
+    borderTopColor: "#ccc",
+  },
+
+  postDetailSendInnerContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingHorizontal: 20,
+    paddingTop: 15,
+  },
+
+  postDetailSendInput: {
+    flex: 1,
+    marginRight: 10,
+    paddingTop: 5,
+    borderRadius: 4,
+    paddingLeft: 15,
+    borderColor: "#ccc",
+    borderWidth: 1,
+    fontSize: 15,
+    marginBottom: 20,
+    height: 60,
+    color: "#000",
+    fontFamily: "PoppinsRegular",
+  },
 });
 
 export default postStyles;

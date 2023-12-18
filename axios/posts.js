@@ -13,6 +13,26 @@ const postApi = {
     }
   },
 
+  getOnePosts: async (id) => {
+    try {
+      const response = await header.get(`/posts/${id}`);
+
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  searchPosts: async (value) => {
+    try {
+      const response = await header.get(`/posts/search/${value}`);
+
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  },
+
   createPosts: async (description, tags) => {
     try {
       const authUser = await storage.getAuthUser();
@@ -22,8 +42,6 @@ const postApi = {
         hashtags: tags,
         owner: authUser._id,
       };
-
-      console.log(data);
 
       const response = await header.post("/posts/create", data);
 
@@ -59,12 +77,12 @@ const postApi = {
     }
   },
 
-  commentPost: async (postId, data) => {
+  commentPost: async (postId, comment) => {
     try {
       const authUser = await storage.getAuthUser();
       const finalData = {
-        comment: data.comment,
-        owner: authUser._id,
+        comment,
+        userId: authUser._id,
       };
 
       const response = await header.post(

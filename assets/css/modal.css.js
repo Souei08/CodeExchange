@@ -10,10 +10,28 @@ const modalStyles = StyleSheet.create({
     height: "100%",
   },
   modalContent: {
-    width: "80%",
+    width: "90%",
     backgroundColor: "#0C356A",
     padding: 20,
     borderRadius: 10,
+  },
+
+  modalCreateButtonContainer: {
+    marginBottom: 20,
+    backgroundColor: "#FFCD17",
+    paddingVertical: 5,
+    paddingHorizontal: 8,
+    borderRadius: 4,
+    width: "100%",
+    alignSelf: "center",
+    marginBottom: 10,
+  },
+
+  modalCreateButtonText: {
+    color: "#000",
+    fontSize: 14,
+    textAlign: "center",
+    fontFamily: "PoppinsBold",
   },
 });
 

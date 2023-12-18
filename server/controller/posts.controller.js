@@ -2,7 +2,9 @@ import Posts from "../models/posts.model.js";
 
 export const getPosts = async (req, res) => {
   try {
-    const getPosts = await Posts.find().populate("owner");
+    const getPosts = await Posts.find()
+      .populate("owner")
+      .populate("comments.user");
 
     res.status(200).json(getPosts);
   } catch (error) {
@@ -69,13 +71,15 @@ export const getOnePost = async (req, res) => {
   const postId = req.params.id;
 
   try {
-    const posts = await Posts.findById(postId);
+    const posts = await Posts.findById(postId)
+      .populate("owner")
+      .populate("comments.user");
 
     if (!posts) {
       return res.status(404).json({ message: "Posts not found" });
     }
 
-    res.json(posts);
+    res.status(200).json(posts);
   } catch (error) {
     console.error(error);
     res.status(500).send("Internal Server Error");
@@ -167,5 +171,37 @@ export const deleteComment = async (req, res) => {
   } catch (error) {
     console.error("Error deleting comment:", error);
     res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const searchPost = async (req, res) => {
+  const { value } = req.params;
+
+  try {
+    if (value === null || value.length !== 0) {
+      const postsQuery = {
+        $or: [
+          { description: { $regex: value, $options: "i" } },
+          { hashtags: { $regex: value, $options: "i" } },
+          { "comments.comment": { $regex: value, $options: "i" } },
+          { "owner.firstName": { $regex: value, $options: "i" } },
+          { "owner.lastName": { $regex: value, $options: "i" } },
+          { "owner.username": { $regex: value, $options: "i" } },
+          { "owner.email": { $regex: value, $options: "i" } },
+        ],
+      };
+
+      const postsResult = await Posts.find(postsQuery);
+
+      const populatedResult = await Posts.populate(postsResult, [
+        { path: "owner" },
+        { path: "comments.user" },
+      ]);
+
+      res.status(200).json(populatedResult);
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Internal Server Error");
   }
 };
