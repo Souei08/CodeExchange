@@ -22,7 +22,7 @@ import { useAuth } from "../../context/AuthContext";
 
 const ProfileScreen = ({ navigation }) => {
   const { visitUser } = useAuth();
-  const [userProfile, setUserProfile] = useState(null);
+  const [userProfile, setUserProfile] = useState([]);
   const [ownerPosts, setOwnerPosts] = useState(null);
   const [updateModalProf, setUpdateModalProf] = useState(false);
 
@@ -115,7 +115,7 @@ const ProfileScreen = ({ navigation }) => {
       <CustomUpdateUserModal
         updateModalProf={updateModalProf}
         closeModalUpdateProf={closeModalUpdateProf}
-        user={visitUser}
+        user={userProfile}
         getUser={fetchData}
       />
     </View>

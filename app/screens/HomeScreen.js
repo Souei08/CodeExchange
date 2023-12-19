@@ -63,7 +63,7 @@ const HomeScreen = ({ navigation, onLayoutRootView }) => {
   useEffect(() => {
     getPosts();
     getAuthUser();
-  }, []);
+  }, [navigation]);
 
   const renderItem = ({ item }) => (
     <CustomPosts

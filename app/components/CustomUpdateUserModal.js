@@ -32,7 +32,6 @@ const CustomUpdateUserModal = ({
   user,
   getUser,
 }) => {
-  const { setVisitUser } = useAuth();
   // const [selectedImage, setSelectedImage] = useState(null);
 
   const [formData, setFormData] = useState([
