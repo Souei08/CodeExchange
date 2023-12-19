@@ -25,6 +25,14 @@ const profileStyles = StyleSheet.create({
     marginRight: 20,
   },
 
+  profileEditIcon: {
+    borderRadius: 5,
+    padding: 5,
+    marginLeft: "auto",
+    marginTop: 10,
+    alignSelf: "flex-start",
+  },
+
   profileName: {
     fontFamily: "PoppinsBold",
     fontSize: 18,

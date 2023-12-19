@@ -5,6 +5,7 @@ import {
   registerUser,
   loginUser,
   updateUser,
+  getOneUser,
 } from "../controller/users.controller.js";
 
 import authenticatedMiddleware from "../middleware/authenticated.middleware.js";
@@ -25,6 +26,8 @@ const router = express.Router();
 router.get("/", getUsers);
 router.post("/login", loginUser);
 router.post("/create", registerUser);
+
+router.get("/:userId", authenticatedMiddleware.verifyToken, getOneUser);
 router.put(
   "/update/:userId",
   upload.single("profileImage"),

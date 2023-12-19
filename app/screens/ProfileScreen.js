@@ -1,13 +1,7 @@
 // Imports
 import React, { useEffect, useState } from "react";
-import {
-  View,
-  Text,
-  Image,
-  FlatList,
-  Alert,
-  TouchableOpacity,
-} from "react-native";
+import { View, Text, Image, FlatList, TouchableOpacity } from "react-native";
+import { Feather } from "@expo/vector-icons";
 
 // Styles
 import profileStyles from "../../assets/css/profile.css";
@@ -21,12 +15,14 @@ import CustomUpdateUserModal from "../components/CustomUpdateUserModal";
 
 // Api
 import postApi from "../../axios/posts";
+import usersApi from "../../axios/users";
 
 // Context
 import { useAuth } from "../../context/AuthContext";
 
 const ProfileScreen = ({ navigation }) => {
   const { visitUser } = useAuth();
+  const [userProfile, setUserProfile] = useState(null);
   const [ownerPosts, setOwnerPosts] = useState(null);
   const [updateModalProf, setUpdateModalProf] = useState(false);
 
@@ -44,8 +40,10 @@ const ProfileScreen = ({ navigation }) => {
 
       if (userAuthenticated || visitUser) {
         const ownerPosts = await postApi.getOwnerPosts(visitUser._id);
+        const userProfile = await usersApi.findOneUser(visitUser._id);
 
         setOwnerPosts(ownerPosts);
+        setUserProfile(userProfile);
       } else {
         console.error("Error: User authentication data is undefined.");
       }
@@ -58,19 +56,9 @@ const ProfileScreen = ({ navigation }) => {
     fetchData();
   }, [visitUser]);
 
-  const handleHashtagClick = (hashtag) => {
-    Alert.alert(`Hashtag Clicked: ${hashtag}`);
-  };
-
-  const handleItemClick = (item) => {
-    Alert.alert("Item Clicked", `You clicked on ${item.owner.firstName}`);
-  };
-
   const renderItem = ({ item }) => (
     <CustomPosts
       item={item}
-      handleHashtagClick={handleHashtagClick}
-      handleItemClick={handleItemClick}
       navigation={navigation}
       loginUser={visitUser}
       getPosts={fetchData}
@@ -93,21 +81,24 @@ const ProfileScreen = ({ navigation }) => {
           />
           <View>
             <Text style={profileStyles.profileName}>
-              {visitUser?.firstName + " " + visitUser?.lastName}
+              {userProfile?.firstName + " " + userProfile?.lastName}
             </Text>
             <Text style={profileStyles.profileEmail}>
-              @{visitUser?.username}
+              @{userProfile?.username}
             </Text>
           </View>
 
-          <TouchableOpacity onPress={isModalUpdateProf}>
-            <Text>Edit</Text>
+          <TouchableOpacity
+            onPress={isModalUpdateProf}
+            style={profileStyles.profileEditIcon}
+          >
+            <Text>
+              <Feather name="edit" size={24} color="black" />
+            </Text>
           </TouchableOpacity>
         </View>
 
-        <Text style={profileStyles.profileBios}>
-          Learning to turn caffeine into code and errors into experience!💡
-        </Text>
+        <Text style={profileStyles.profileBios}>{userProfile?.bio}</Text>
       </View>
 
       <Text style={profileStyles.profileTitle}>Posts</Text>
@@ -125,6 +116,7 @@ const ProfileScreen = ({ navigation }) => {
         updateModalProf={updateModalProf}
         closeModalUpdateProf={closeModalUpdateProf}
         user={visitUser}
+        getUser={fetchData}
       />
     </View>
   );

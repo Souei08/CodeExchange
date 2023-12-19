@@ -23,9 +23,10 @@ import postApi from "../../axios/posts";
 
 // Storage
 import storage from "../../utils/storage";
+import { removeSpecialCharacters } from "../../utils/Utility";
 
 const PostDetailScreen = ({ navigation }) => {
-  const { visitPost, setUserVisit } = useAuth();
+  const { visitPost, setUserVisit, setSearchValue } = useAuth();
 
   const [post, setPost] = useState([]);
   const [description, setDescription] = useState("");
@@ -61,13 +62,10 @@ const PostDetailScreen = ({ navigation }) => {
     await navigation.navigate("Profile");
   };
 
-  const handleHashtagClick = (hashtag) => {
-    Alert.alert(`Hashtag Clicked: ${hashtag}`);
-  };
-
-  const handleItemClick = async (post) => {
-    await setVisitPost(post);
-    navigation.navigate("PostDetail");
+  const handleHashtagClick = async (hashtag) => {
+    const result = removeSpecialCharacters(hashtag);
+    await setSearchValue(result);
+    await navigation.navigate("Search");
   };
 
   const postLiked = (posts) => {
@@ -134,27 +132,25 @@ const PostDetailScreen = ({ navigation }) => {
         </Text> */}
         </View>
 
-        <TouchableOpacity onPress={() => handleItemClick(post)}>
-          <Text style={postStyles.postsParagraph}>{post?.description}</Text>
+        <Text style={postStyles.postsParagraph}>{post?.description}</Text>
 
-          <View
-            style={{
-              flexWrap: "wrap",
-              flexDirection: "row",
-              marginTop: 20,
-            }}
-          >
-            {post?.hashtags?.map((hashtag) => (
-              <TouchableOpacity
-                key={hashtag}
-                onPress={() => handleHashtagClick(hashtag)}
-                style={postStyles.hashtagContainer}
-              >
-                <Text style={postStyles.postHashtags}>{hashtag} </Text>
-              </TouchableOpacity>
-            ))}
-          </View>
-        </TouchableOpacity>
+        <View
+          style={{
+            flexWrap: "wrap",
+            flexDirection: "row",
+            marginTop: 20,
+          }}
+        >
+          {post?.hashtags?.map((hashtag) => (
+            <TouchableOpacity
+              key={hashtag}
+              onPress={() => handleHashtagClick(hashtag)}
+              style={postStyles.hashtagContainer}
+            >
+              <Text style={postStyles.postHashtags}>{hashtag} </Text>
+            </TouchableOpacity>
+          ))}
+        </View>
 
         <View style={postStyles.postInteractionContainer}>
           <TouchableOpacity onPress={() => handleLikePost(post)}>

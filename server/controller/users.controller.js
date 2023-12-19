@@ -16,6 +16,21 @@ export const getUsers = async (req, res) => {
   }
 };
 
+export const getOneUser = async (req, res) => {
+  try {
+    const userId = req.params.userId;
+
+    const user = await Users.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
 export const registerUser = async (req, res) => {
   const { firstName, lastName, username, email, password } = req.body;
 
@@ -75,35 +90,19 @@ export const updateUser = async (req, res) => {
     const userId = req.params.userId;
     const { firstName, lastName, bio, email, password, username } = req.body;
 
-    // Access file data using req.file
-    const profileImage = req.file;
-
-    // Process the form data as needed
-    console.log(req.body);
-    console.log(req.file);
-
-    if (profileImage) {
-      console.log("Profile Image:", profileImage.originalname);
-      // Handle the file as needed (e.g., save it to disk, database, etc.)
-    }
-
-    return false;
-
-    const saltRounds = 10;
-    const hashPassword = await bcrypt.hash(password, saltRounds);
-
     const newUser = {
       firstName,
       lastName,
       username,
       bio,
       email,
-      password: hashPassword,
     };
 
-    if (req.file) {
-      const profilePictureData = req.file.buffer.toString("base64");
-      newUser.profileImage = profilePictureData;
+    if (password) {
+      const saltRounds = 10;
+      const hashPassword = await bcrypt.hash(password, saltRounds);
+
+      newUser.password = hashPassword;
     }
 
     const updatedUser = await Users.findByIdAndUpdate(

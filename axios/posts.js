@@ -33,6 +33,36 @@ const postApi = {
     }
   },
 
+  editPosts: async (postId, description, tags) => {
+    try {
+      const authUser = await storage.getAuthUser();
+
+      const data = {
+        description: description,
+        hashtags: tags,
+        owner: authUser._id,
+      };
+
+      const response = await header.put(`/posts/update/${postId}`, data);
+
+      return response.data;
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  },
+
+  deletePosts: async (postId) => {
+    try {
+      const response = await header.delete(`/posts/delete/${postId}`);
+
+      return response.data;
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  },
+
   createPosts: async (description, tags) => {
     try {
       const authUser = await storage.getAuthUser();

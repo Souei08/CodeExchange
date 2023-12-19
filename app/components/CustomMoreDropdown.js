@@ -3,11 +3,20 @@ import React, { useState } from "react";
 import { View, TouchableOpacity, Text, StyleSheet } from "react-native";
 import Modal from "react-native-modal";
 
-const MoreDropdown = ({ options, text, textStyle, editModal, deleteModal }) => {
+const MoreDropdown = ({
+  options,
+  text,
+  textStyle,
+  editModal,
+  deleteModal,
+  item,
+  onPress,
+}) => {
   const [isModalVisible, setModalVisible] = useState(false);
 
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
+    onPress(item);
   };
 
   const handleOptionClick = (option) => {

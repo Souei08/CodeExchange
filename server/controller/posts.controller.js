@@ -37,13 +37,13 @@ export const deletePost = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const foundUser = await Posts.findOne({ _id: id });
+    const foundPost = await Posts.findOne({ _id: id });
 
-    if (foundUser || foundUser.length == 0) {
-      const response = await foundUser.deleteOne({ _id: id });
+    if (foundPost || foundPost.length == 0) {
+      const response = await foundPost.deleteOne({ _id: id });
       res.status(202).json(response);
     } else {
-      res.status(404).json({ message: `User not found.` });
+      res.status(404).json({ message: `Post not found.` });
     }
   } catch (error) {
     res.status(409).json({

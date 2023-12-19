@@ -1,10 +1,19 @@
 // Imports
 import React, { useState } from "react";
-import { View, Text, TouchableOpacity, Image } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Image,
+  TextInput,
+  Alert,
+} from "react-native";
+import Tags from "react-native-tags";
 
 // Styles
 import postStyles from "../../assets/css/posts.css";
 import homeStyles from "../../assets/css/home.css";
+import formStyles from "../../assets/css/form.css";
 
 // Custom Components
 import CustomModal from "./CustomModal";
@@ -23,6 +32,10 @@ import { removeSpecialCharacters } from "../../utils/Utility";
 const CustomPosts = ({ item, navigation, getPosts, loginUser }) => {
   const [isModalEdit, setModalEdit] = useState(false);
   const [isModalDelete, setModalDelete] = useState(false);
+
+  const [selectedPostId, setSelectedPostId] = useState(null);
+  const [tags, setTags] = useState([]);
+  const [description, setDescription] = useState(null);
 
   const { setUserVisit, setVisitPost, setSearchValue } = useAuth();
   const options = ["Edit", "Delete"];
@@ -70,6 +83,67 @@ const CustomPosts = ({ item, navigation, getPosts, loginUser }) => {
     );
   };
 
+  const handleEditPost = async () => {
+    if (!description) {
+      // toast.show({
+      //   type: "success",
+      //   text1: "Please provide description to your post.",
+      // });
+
+      Alert.alert("Description is required");
+
+      return false;
+    }
+
+    try {
+      const userAuthenticated = await postApi.editPosts(
+        selectedPostId,
+        description,
+        tags
+      );
+
+      Alert.alert(userAuthenticated.message);
+
+      getPosts();
+      closeModalEdit();
+    } catch (error) {
+      Alert.alert(error.message);
+      return;
+    }
+  };
+
+  const handleDeletePost = async () => {
+    try {
+      const userAuthenticated = await postApi.deletePosts(selectedPostId);
+
+      Alert.alert(userAuthenticated.message);
+
+      getPosts();
+      closeModalEdit();
+    } catch (error) {
+      Alert.alert(error.message);
+      return;
+    }
+  };
+
+  const handleTagPress = (index, tagLabel, event, deleted) => {
+    console.log(index, tagLabel, event, deleted);
+  };
+
+  const handleTagChange = (tags) => {
+    setTags(tags);
+  };
+
+  const handleDescriptionChange = (text) => {
+    setDescription(text);
+  };
+
+  const handleSelectedPosts = (item) => {
+    setSelectedPostId(item._id);
+    setDescription(item.description);
+    setTags(item.hashtags);
+  };
+
   return (
     <View key={item.id} style={[postStyles.postsCards]}>
       <View
@@ -104,6 +178,8 @@ const CustomPosts = ({ item, navigation, getPosts, loginUser }) => {
               textStyle={postStyles.postMoreIcon}
               editModal={openModalEdit}
               deleteModal={openModalDelete}
+              item={item}
+              onPress={handleSelectedPosts}
             />
           </Text>
         )}
@@ -174,9 +250,46 @@ const CustomPosts = ({ item, navigation, getPosts, loginUser }) => {
           Update Post
         </Text>
 
+        <Text style={formStyles.modalFormLabel}>Description:</Text>
+        <TextInput
+          style={formStyles.modalFormInput}
+          placeholder="Enter your ideas"
+          placeholderTextColor="#FFF"
+          value={description}
+          onChangeText={handleDescriptionChange}
+          multiline={true}
+          numberOfLines={10}
+        />
+
+        <Text style={formStyles.modalFormLabel}>Hashtags:</Text>
+        <Tags
+          style={{ marginBottom: 20 }}
+          initialTags={tags}
+          onChangeTags={handleTagChange}
+          onTagPress={handleTagPress}
+          containerStyle={{ flexDirection: "row", flexWrap: "wrap" }}
+          inputStyle={{
+            backgroundColor: "#0C356A",
+            borderRadius: 5,
+            fontFamily: "PoppinsBold",
+            borderWidth: 1,
+            borderColor: "#fff",
+            color: "#fff",
+          }}
+          tagTextStyle={{
+            fontFamily: "PoppinsBold",
+            color: "#000",
+          }}
+          tagContainerStyle={{
+            fontFamily: "PoppinsBold",
+            backgroundColor: "#FFC436",
+            borderRadius: 8,
+          }}
+        />
+
         <CustomButton
-          // onPress={handleCreatePost}
-          buttonText={"Post"}
+          onPress={handleEditPost}
+          buttonText={"Update Post"}
           ButtonTextStyle={homeStyles.homeCreateButtonText}
           buttonContainerStyle={[
             homeStyles.homeCreateButtonContainer,
@@ -195,12 +308,21 @@ const CustomPosts = ({ item, navigation, getPosts, loginUser }) => {
             marginBottom: 20,
           }}
         >
-          Delete Post
+          Are you sure to delete this post?
         </Text>
 
         <CustomButton
-          // onPress={handleCreatePost}
-          buttonText={"Post"}
+          onPress={handleDeletePost}
+          buttonText={"Delete"}
+          ButtonTextStyle={homeStyles.homeCreateButtonText}
+          buttonContainerStyle={[
+            homeStyles.homeCreateButtonContainer,
+            { width: "100%", marginBottom: 30 },
+          ]}
+        />
+        <CustomButton
+          onPress={closeModalDelete}
+          buttonText={"Close"}
           ButtonTextStyle={homeStyles.homeCreateButtonText}
           buttonContainerStyle={[
             homeStyles.homeCreateButtonContainer,
