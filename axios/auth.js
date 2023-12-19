@@ -22,14 +22,7 @@ const authApi = {
 
   register: async (data) => {
     try {
-      const { firstName, lastName, username, password, email } = data;
-      const response = await header.post("/users/create", {
-        firstName,
-        lastName,
-        username,
-        password,
-        email,
-      });
+      const response = await header.post("/users/create", data);
 
       return response.data;
     } catch (error) {

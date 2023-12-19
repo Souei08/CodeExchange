@@ -1,9 +1,10 @@
 // context/header.js
 import axios from "axios";
 import storage from "../utils/storage";
+import { apiHeader } from "@env";
 
 const headers = axios.create({
-  baseURL: "http:///192.168.1.74:5000",
+  baseURL: apiHeader,
 });
 
 headers.interceptors.request.use(

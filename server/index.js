@@ -19,6 +19,7 @@ app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
 
 app.use(cors());
 
+app.use(express.static("assets/profiles"));
 app.use("/posts", authMiddleware.verifyToken, postRoutes);
 app.use("/users", userRoutes);
 

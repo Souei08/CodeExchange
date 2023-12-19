@@ -20,11 +20,31 @@ const usersApi = {
 
   updateProfile: async (userId, data) => {
     try {
-      const response = await header.put(`/users/update/${userId}`, data, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      const response = await header.put(`/users/update/${userId}`, data);
+
+      return response.data;
+    } catch (error) {
+      if (error.response && error.response.status === 400) {
+        const errorMessage = error.response.data.message;
+        throw new Error(errorMessage);
+      } else {
+        console.error(error);
+        throw error;
+      }
+    }
+  },
+
+  updateProfileImage: async (userId, formData) => {
+    try {
+      const response = await header.post(
+        `/users/updateProfilePicture/${userId}`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
 
       return response.data;
     } catch (error) {

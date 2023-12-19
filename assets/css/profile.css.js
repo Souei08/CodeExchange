@@ -18,12 +18,12 @@ const profileStyles = StyleSheet.create({
     backgroundColor: "#fff",
   },
 
-  profilePicture: {
-    width: 70,
-    height: 70,
-    borderRadius: 10,
-    marginRight: 20,
-  },
+  // profilePicture: {
+  //   width: 70,
+  //   height: 70,
+  //   borderRadius: 10,
+  //   marginRight: 20,
+  // },
 
   profileEditIcon: {
     borderRadius: 5,
@@ -81,18 +81,17 @@ const profileStyles = StyleSheet.create({
   profileIconContainer: {
     position: "absolute",
     top: 0,
-    right: -10,
+    right: 10,
     zIndex: 1,
-    backgroundColor: "transparent",
-    backgroundColor: "red",
+    backgroundColor: "#0174BE",
     borderRadius: 100,
     padding: 5,
   },
   profileEditImage: {
-    width: 100,
-    height: 100,
+    width: 70,
+    height: 70,
     borderRadius: 10,
-    marginBottom: 20,
+    marginRight: 20,
   },
 });
 

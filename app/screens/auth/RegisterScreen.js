@@ -25,6 +25,13 @@ const RegisterScreen = ({ navigation, onLayoutRootView }) => {
       secureTextEntry: true,
       key: "password",
     },
+    {
+      id: "6",
+      placeholder: "Confirm Password",
+      value: "",
+      secureTextEntry: true,
+      key: "confirmPassword",
+    },
   ]);
 
   const renderItem = ({ item }) => (
@@ -39,7 +46,7 @@ const RegisterScreen = ({ navigation, onLayoutRootView }) => {
         onChangeText={(text) => handleInputChange(item.id, text)}
         value={item.value}
         secureTextEntry={item.secureTextEntry}
-        placeholderTextColor="#fff"
+        placeholderTextColor="#ccc"
       />
     </View>
   );
@@ -60,15 +67,36 @@ const RegisterScreen = ({ navigation, onLayoutRootView }) => {
   const handleSubmit = async () => {
     const formDataObject = convertFormDataToObject(formData);
 
-    const { firstName, lastName, email, password } = formDataObject;
+    const { firstName, lastName, email, username, password, confirmPassword } =
+      formDataObject;
 
-    if (!firstName || !lastName || !email || !password) {
-      Alert.alert("Please provide all the input fields");
+    if (
+      !firstName ||
+      !lastName ||
+      !email ||
+      !username ||
+      !password ||
+      !confirmPassword
+    ) {
+      Alert.alert("Please provide all the input fields.");
       return false;
     }
 
+    if (password !== confirmPassword) {
+      Alert.alert("Password must be similar.");
+      return false;
+    }
+
+    const updateFormData = {
+      firstName,
+      lastName,
+      email,
+      username,
+      password,
+    };
+
     try {
-      const userAuthenticated = await authApi.register(formDataObject);
+      const userAuthenticated = await authApi.register(updateFormData);
       Alert.alert(userAuthenticated.message);
       navigation.navigate("Login");
 

@@ -29,6 +29,9 @@ import postApi from "../../axios/posts";
 // Utils
 import { removeSpecialCharacters } from "../../utils/Utility";
 
+// .env
+import { apiHeader } from "@env";
+
 const CustomPosts = ({ item, navigation, getPosts, loginUser }) => {
   const [isModalEdit, setModalEdit] = useState(false);
   const [isModalDelete, setModalDelete] = useState(false);
@@ -144,6 +147,16 @@ const CustomPosts = ({ item, navigation, getPosts, loginUser }) => {
     setTags(item.hashtags);
   };
 
+  const imageSource = item?.owner?.profileImage
+    ? {
+        uri: `${apiHeader}/${item?.owner?.profileImage}`,
+      }
+    : require("../../assets/images/default/defaultProfile.jpg");
+
+  if (!item && Object.keys(item).length === 0) {
+    return <Text>No post</Text>;
+  }
+
   return (
     <View key={item.id} style={[postStyles.postsCards]}>
       <View
@@ -155,10 +168,7 @@ const CustomPosts = ({ item, navigation, getPosts, loginUser }) => {
           marginBottom: 20,
         }}
       >
-        <Image
-          source={require("../../assets/images/default/defaultProfile.jpg")}
-          style={postStyles.postsOwnerProfile}
-        />
+        <Image source={imageSource} style={postStyles.postsOwnerProfile} />
 
         <View>
           <Text style={postStyles.postsName}>

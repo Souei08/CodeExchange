@@ -19,6 +19,7 @@ import usersApi from "../../axios/users";
 
 // Context
 import { useAuth } from "../../context/AuthContext";
+import CustomImagePicker from "../components/CustomImagePicker";
 
 const ProfileScreen = ({ navigation }) => {
   const { visitUser } = useAuth();
@@ -75,10 +76,7 @@ const ProfileScreen = ({ navigation }) => {
             alignItems: "center",
           }}
         >
-          <Image
-            source={require("../../assets/images/default/defaultProfile.jpg")}
-            style={profileStyles.profilePicture}
-          />
+          <CustomImagePicker user={userProfile} />
           <View>
             <Text style={profileStyles.profileName}>
               {userProfile?.firstName + " " + userProfile?.lastName}

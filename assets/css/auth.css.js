@@ -6,7 +6,7 @@ const authStyles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     backgroundColor: "#0C356A",
-    paddingHorizontal: 50,
+    paddingHorizontal: 30,
   },
 
   authLogoContainer: {
