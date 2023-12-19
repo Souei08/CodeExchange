@@ -23,7 +23,7 @@ import postApi from "../../axios/posts";
 
 // Storage
 import storage from "../../utils/storage";
-import { removeSpecialCharacters } from "../../utils/Utility";
+import { removeSpecialCharacters, showToast } from "../../utils/Utility";
 
 const PostDetailScreen = ({ navigation }) => {
   const { visitPost, setUserVisit, setSearchValue } = useAuth();
@@ -52,7 +52,19 @@ const PostDetailScreen = ({ navigation }) => {
     getAuthUser();
   }, [visitPost]);
 
+  const postLiked = (posts) => {
+    return (
+      posts?.likes?.filter((post) => post.user === authUser._id).length === 1
+    );
+  };
+
   const handleLikePost = async (post) => {
+    if (!postLiked(post)) {
+      showToast("Post liked", "success");
+    } else {
+      showToast("Post unliked", "error");
+    }
+
     await postApi.likePost(post._id);
     getOnePost();
   };
@@ -68,29 +80,20 @@ const PostDetailScreen = ({ navigation }) => {
     await navigation.navigate("Search");
   };
 
-  const postLiked = (posts) => {
-    return (
-      posts?.likes?.filter((post) => post.user === authUser._id).length === 1
-    );
-  };
-
   const handleComment = async () => {
     if (!description) {
       return false;
     }
 
     try {
-      const userAuthenticated = await postApi.commentPost(
-        visitPost._id,
-        description
-      );
+      await postApi.commentPost(visitPost._id, description);
 
-      Alert.alert(userAuthenticated.message);
+      showToast("Comment Success.", "success");
 
       setDescription(null);
       getOnePost();
     } catch (error) {
-      Alert.alert(error.message);
+      showToast(error.message, "error");
       return;
     }
   };

@@ -9,6 +9,7 @@ import {
   Alert,
 } from "react-native";
 import Tags from "react-native-tags";
+import Toast from "react-native-toast-message";
 
 // Styles
 import postStyles from "../../assets/css/posts.css";
@@ -27,7 +28,7 @@ import { useAuth } from "../../context/AuthContext";
 import postApi from "../../axios/posts";
 
 // Utils
-import { removeSpecialCharacters } from "../../utils/Utility";
+import { removeSpecialCharacters, showToast } from "../../utils/Utility";
 
 // .env
 import { apiHeader } from "@env";
@@ -65,6 +66,12 @@ const CustomPosts = ({ item, navigation, getPosts, loginUser }) => {
   };
 
   const handleLikePost = async (item) => {
+    if (!postLiked(item)) {
+      showToast("Post liked", "success");
+    } else {
+      showToast("Post unliked", "error");
+    }
+
     await postApi.likePost(item._id);
     getPosts();
   };
@@ -88,43 +95,34 @@ const CustomPosts = ({ item, navigation, getPosts, loginUser }) => {
 
   const handleEditPost = async () => {
     if (!description) {
-      // toast.show({
-      //   type: "success",
-      //   text1: "Please provide description to your post.",
-      // });
-
-      Alert.alert("Description is required");
+      showToast("Description must be provided.", "success");
 
       return false;
     }
 
     try {
-      const userAuthenticated = await postApi.editPosts(
-        selectedPostId,
-        description,
-        tags
-      );
+      await postApi.editPosts(selectedPostId, description, tags);
 
-      Alert.alert(userAuthenticated.message);
+      showToast("Post updated successfully.", "success");
 
       getPosts();
       closeModalEdit();
     } catch (error) {
-      Alert.alert(error.message);
+      showToast("Error Message", error.message, "error");
       return;
     }
   };
 
   const handleDeletePost = async () => {
     try {
-      const userAuthenticated = await postApi.deletePosts(selectedPostId);
+      await postApi.deletePosts(selectedPostId);
 
-      Alert.alert(userAuthenticated.message);
+      showToast("Post deleted successfully.", "success");
 
       getPosts();
       closeModalEdit();
     } catch (error) {
-      Alert.alert(error.message);
+      showToast(error.message, "error");
       return;
     }
   };
@@ -234,7 +232,7 @@ const CustomPosts = ({ item, navigation, getPosts, loginUser }) => {
           </View>
         </TouchableOpacity>
 
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => handleItemClick(item)}>
           <View style={postStyles.postInnerInteractionContainer}>
             <Image
               source={require("../../assets/icons/PostIcons/comment.png")}

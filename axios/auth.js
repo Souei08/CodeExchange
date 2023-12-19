@@ -1,6 +1,6 @@
 // api/auth.js
-import header from "./header";
 import storage from "../utils/storage";
+import header from "./header";
 
 const authApi = {
   login: async (email, password) => {
@@ -15,7 +15,7 @@ const authApi = {
 
       return response.data;
     } catch (error) {
-      console.log(error.message);
+      console.log(error);
       throw error;
     }
   },
@@ -44,6 +44,16 @@ const authApi = {
   isAuthenticated: async () => {
     const token = await storage.getToken();
     return !!token;
+  },
+
+  checkToken: async () => {
+    try {
+      const response = await header.get("/checkToken");
+
+      return response;
+    } catch (error) {
+      return error.response?.status;
+    }
   },
 };
 

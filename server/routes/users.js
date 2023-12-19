@@ -21,7 +21,6 @@ const storage = multer.diskStorage({
     const ext = path.extname(file.originalname);
     const filename = path.basename(file.originalname, ext);
 
-    console.log(filename + "-" + uniqueSuffix + ext);
     cb(null, filename + "-" + uniqueSuffix + ext);
   },
 });

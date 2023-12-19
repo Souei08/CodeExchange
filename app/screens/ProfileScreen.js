@@ -24,6 +24,7 @@ import CustomImagePicker from "../components/CustomImagePicker";
 const ProfileScreen = ({ navigation }) => {
   const { visitUser } = useAuth();
   const [userProfile, setUserProfile] = useState([]);
+  const [isEditable, setIsEditable] = useState(false);
   const [ownerPosts, setOwnerPosts] = useState(null);
   const [updateModalProf, setUpdateModalProf] = useState(false);
 
@@ -45,6 +46,9 @@ const ProfileScreen = ({ navigation }) => {
 
         setOwnerPosts(ownerPosts);
         setUserProfile(userProfile);
+        if (userAuthenticated._id === visitUser._id) {
+          setIsEditable(true);
+        }
       } else {
         console.error("Error: User authentication data is undefined.");
       }
@@ -55,7 +59,7 @@ const ProfileScreen = ({ navigation }) => {
 
   useEffect(() => {
     fetchData();
-  }, [visitUser]);
+  }, [visitUser, navigation]);
 
   const renderItem = ({ item }) => (
     <CustomPosts
@@ -76,7 +80,11 @@ const ProfileScreen = ({ navigation }) => {
             alignItems: "center",
           }}
         >
-          <CustomImagePicker user={userProfile} />
+          <CustomImagePicker
+            user={userProfile}
+            fetchData={fetchData}
+            isEditable={isEditable}
+          />
           <View>
             <Text style={profileStyles.profileName}>
               {userProfile?.firstName + " " + userProfile?.lastName}
@@ -109,13 +117,14 @@ const ProfileScreen = ({ navigation }) => {
           paddingHorizontal: 40,
         }}
       />
-
-      <CustomUpdateUserModal
-        updateModalProf={updateModalProf}
-        closeModalUpdateProf={closeModalUpdateProf}
-        user={userProfile}
-        getUser={fetchData}
-      />
+      {isEditable && (
+        <CustomUpdateUserModal
+          updateModalProf={updateModalProf}
+          closeModalUpdateProf={closeModalUpdateProf}
+          user={userProfile}
+          getUser={fetchData}
+        />
+      )}
     </View>
   );
 };

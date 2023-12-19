@@ -35,10 +35,14 @@ export const registerUser = async (req, res) => {
   const { firstName, lastName, username, email, password } = req.body;
 
   try {
-    const existingUser = await Users.findOne({ email: email });
+    const existingEmailUser = await Users.findOne({ email });
+    if (existingEmailUser) {
+      return res.status(400).json({ message: "Email is already in use" });
+    }
 
-    if (existingUser) {
-      return res.status(400).json({ message: "Email already registered" });
+    const existingUsernameUser = await Users.findOne({ username });
+    if (existingUsernameUser) {
+      return res.status(400).json({ message: "Username is already in use" });
     }
 
     const newUser = new Users({
@@ -53,6 +57,7 @@ export const registerUser = async (req, res) => {
 
     res.status(201).json({ message: "Registration successful" });
   } catch (error) {
+    console.log(error);
     res.status(500).json({ message: error.message });
   }
 };
@@ -71,7 +76,7 @@ export const loginUser = async (req, res) => {
 
     if (isPasswordMatch) {
       const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
-        expiresIn: "1h",
+        expiresIn: "7d",
       });
       res
         .status(200)

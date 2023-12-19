@@ -13,7 +13,7 @@ import profileStyles from "../../assets/css/profile.css";
 // Api
 import usersApi from "../../axios/users";
 
-const CustomImagePicker = ({ user }) => {
+const CustomImagePicker = ({ user, fetchData, isEditable }) => {
   const [image, setImage] = useState(null);
 
   useEffect(() => {
@@ -40,6 +40,8 @@ const CustomImagePicker = ({ user }) => {
 
     try {
       await usersApi.updateProfileImage(user._id, formData);
+
+      fetchData();
     } catch (error) {
       console.error("Error uploading image:", error);
     }
@@ -52,7 +54,7 @@ const CustomImagePicker = ({ user }) => {
       quality: 1,
     });
 
-    if (!result.cancelled) {
+    if (!result.canceled) {
       setImage(result.assets[0].uri);
       uploadImage(result.assets[0]);
     }
@@ -66,12 +68,15 @@ const CustomImagePicker = ({ user }) => {
 
   return (
     <View style={profileStyles.profileEditImageContainer}>
-      <TouchableOpacity
-        style={profileStyles.profileIconContainer}
-        onPress={pickImage}
-      >
-        <Entypo name="image" size={20} color="#fff" />
-      </TouchableOpacity>
+      {isEditable && (
+        <TouchableOpacity
+          style={profileStyles.profileIconContainer}
+          onPress={pickImage}
+        >
+          <Entypo name="image" size={20} color="#fff" />
+        </TouchableOpacity>
+      )}
+
       {image ? (
         <Image source={{ uri: image }} style={profileStyles.profileEditImage} />
       ) : (

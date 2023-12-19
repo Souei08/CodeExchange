@@ -1,15 +1,6 @@
 // Imports
 import React, { useEffect, useState } from "react";
-import * as ImagePicker from "expo-image-picker";
-import {
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  Image,
-  FlatList,
-  Alert,
-} from "react-native";
+import { View, Text, TextInput, FlatList, Alert } from "react-native";
 
 // Custom Components
 import CustomModal from "./CustomModal";
@@ -17,14 +8,10 @@ import CustomButton from "./CustomButton";
 
 // Styles
 import authStyles from "../../assets/css/auth.css";
-// import profileStyles from "../../assets/css/profile.css";
 import modalStyles from "../../assets/css/modal.css";
 
 // Api
 import usersApi from "../../axios/users";
-
-// Storage
-import { useAuth } from "../../context/AuthContext";
 
 const CustomUpdateUserModal = ({
   updateModalProf,
@@ -32,8 +19,6 @@ const CustomUpdateUserModal = ({
   user,
   getUser,
 }) => {
-  // const [selectedImage, setSelectedImage] = useState(null);
-
   const [formData, setFormData] = useState([
     {
       id: "1",
@@ -117,32 +102,6 @@ const CustomUpdateUserModal = ({
       prevData.map((item) => (item.id === id ? { ...item, value: text } : item))
     );
   };
-  `
-  // useEffect(() => {
-  //   (async () => {
-  //     const { status } =
-  //       await ImagePicker.requestMediaLibraryPermissionsAsync();
-  //     if (status !== "granted") {
-  //       alert("Sorry, we need camera roll permissions to make this work!");
-  //     }
-  //   })();
-  // }, []);`;
-
-  // const pickImage = async () => {
-  //   try {
-  //     const result = await ImagePicker.launchImageLibraryAsync({
-  //       mediaTypes: ImagePicker.MediaTypeOptions.Images,
-  //       aspect: [4, 3],
-  //       quality: 1,
-  //     });
-
-  //     if (!result.cancelled) {
-  //       setSelectedImage(result.assets[0]);
-  //     }
-  //   } catch (error) {
-  //     console.error("Error picking image:", error);
-  //   }
-  // };
 
   const convertFormDataToObject = (formData) => {
     return formData.reduce((acc, item) => {
@@ -254,19 +213,6 @@ const CustomUpdateUserModal = ({
       >
         Update Profile
       </Text>
-
-      {/* // <View style={profileStyles.profileEditImageContainer}>
-        //   <TouchableOpacity
-        //     style={profileStyles.profileIconContainer}
-        //     onPress={pickImage}
-        //   >
-        //     <Text>Edit</Text>
-        //   </TouchableOpacity>
-        //   <Image
-        //     source={require("../../assets/images/default/defaultProfile.jpg")}
-        //     style={profileStyles.profileEditImage}
-        //   />
-        // </View> */}
 
       <FlatList
         data={formData}

@@ -29,7 +29,6 @@ const profileStyles = StyleSheet.create({
     borderRadius: 5,
     padding: 5,
     marginLeft: "auto",
-    marginTop: 10,
     alignSelf: "flex-start",
   },
 

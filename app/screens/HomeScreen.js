@@ -1,7 +1,6 @@
 //  Imports
 import Tags from "react-native-tags";
 import React, { useEffect, useState } from "react";
-// import { useToast } from "react-native-toast-message";
 import { Alert, FlatList, Text, TextInput, View } from "react-native";
 
 // Styles
@@ -18,6 +17,7 @@ import CustomPosts from "../components/CustomPosts";
 
 // Utils
 import storage from "../../utils/storage";
+import { showToast } from "../../utils/Utility";
 
 const HomeScreen = ({ navigation, onLayoutRootView }) => {
   // const toast = useToast();
@@ -52,9 +52,9 @@ const HomeScreen = ({ navigation, onLayoutRootView }) => {
     setAuthUser(authUser);
   };
 
-  const handleTagPress = (index, tagLabel, event, deleted) => {
-    console.log(index, tagLabel, event, deleted);
-  };
+  // const handleTagPress = (index, tagLabel, event, deleted) => {
+  //   console.log(index, tagLabel, event, deleted);
+  // };
 
   const handleTagChange = (tags) => {
     setTags(tags);
@@ -75,26 +75,23 @@ const HomeScreen = ({ navigation, onLayoutRootView }) => {
   );
 
   const handleCreatePost = async () => {
-    if (!description || tags.length === 0) {
-      // toast.show({
-      //   type: "success",
-      //   text1: "Please provide description to your post.",
-      // });
+    if (!description) {
+      showToast("Description must be provided.", "success");
 
       return false;
     }
 
     try {
-      const userAuthenticated = await postApi.createPosts(description, tags);
+      await postApi.createPosts(description, tags);
 
-      Alert.alert(userAuthenticated.message);
+      showToast("Post created successfully.", "success");
 
       setTags([]);
       setDescription(null);
       closeModal();
       getPosts();
     } catch (error) {
-      Alert.alert(error.message);
+      showToast(error.message, "error");
       return;
     }
   };
@@ -150,7 +147,7 @@ const HomeScreen = ({ navigation, onLayoutRootView }) => {
             style={{ marginBottom: 20 }}
             initialTags={tags}
             onChangeTags={handleTagChange}
-            onTagPress={handleTagPress}
+            // onTagPress={handleTagPress}
             containerStyle={{ flexDirection: "row", flexWrap: "wrap" }}
             inputStyle={{
               backgroundColor: "#0C356A",

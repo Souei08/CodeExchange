@@ -1,6 +1,6 @@
 // Imports
 import React, { useState } from "react";
-import { View, Text, TextInput, Alert, FlatList } from "react-native";
+import { View, Text, TextInput, FlatList } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
 // Styles
@@ -12,12 +12,21 @@ import CustomButton from "../../components/CustomButton";
 // Api
 import authApi from "../../../axios/auth";
 
+// Utils
+import { showToast, validateEmail } from "../../../utils/Utility";
+
 const RegisterScreen = ({ navigation, onLayoutRootView }) => {
   const [formData, setFormData] = useState([
     { id: "1", placeholder: "First Name", value: "", key: "firstName" },
     { id: "2", placeholder: "Last Name", value: "", key: "lastName" },
     { id: "3", placeholder: "Username", value: "", key: "username" },
-    { id: "4", placeholder: "Email", value: "", key: "email" },
+    {
+      id: "4",
+      placeholder: "Email",
+      value: "",
+      key: "email",
+      keyboardType: "email-address",
+    },
     {
       id: "5",
       placeholder: "Password",
@@ -46,6 +55,7 @@ const RegisterScreen = ({ navigation, onLayoutRootView }) => {
         onChangeText={(text) => handleInputChange(item.id, text)}
         value={item.value}
         secureTextEntry={item.secureTextEntry}
+        keyboardType={item.keyboardType}
         placeholderTextColor="#ccc"
       />
     </View>
@@ -78,12 +88,17 @@ const RegisterScreen = ({ navigation, onLayoutRootView }) => {
       !password ||
       !confirmPassword
     ) {
-      Alert.alert("Please provide all the input fields.");
+      showToast("Please provide all the input fields.", "error");
       return false;
     }
 
     if (password !== confirmPassword) {
-      Alert.alert("Password must be similar.");
+      showToast("Password must be similar.", "error");
+      return false;
+    }
+
+    if (!validateEmail(email)) {
+      showToast("Email input is invalid.", "error");
       return false;
     }
 
@@ -97,7 +112,7 @@ const RegisterScreen = ({ navigation, onLayoutRootView }) => {
 
     try {
       const userAuthenticated = await authApi.register(updateFormData);
-      Alert.alert(userAuthenticated.message);
+      showToast(userAuthenticated.message, "success");
       navigation.navigate("Login");
 
       setFormData([
@@ -113,8 +128,7 @@ const RegisterScreen = ({ navigation, onLayoutRootView }) => {
         { id: "4", placeholder: "Email", value: "", key: "email" },
       ]);
     } catch (error) {
-      console.log(error);
-      Alert.alert(error.message);
+      showToast(error.message, "error");
       return;
     }
   };

@@ -12,6 +12,7 @@ import CustomButton from "../../components/CustomButton";
 // Api And Context
 import authApi from "../../../axios/auth";
 import { useAuth } from "../../../context/AuthContext";
+import { showToast } from "../../../utils/Utility";
 
 const LoginScreen = ({ navigation, onLayoutRootView }) => {
   const { login } = useAuth();
@@ -29,7 +30,7 @@ const LoginScreen = ({ navigation, onLayoutRootView }) => {
 
   const handleSubmit = async () => {
     if (!username || !password) {
-      Alert.alert("Please provide email and password");
+      showToast("Please provide email and password.", "error");
 
       return false;
     }
@@ -37,11 +38,11 @@ const LoginScreen = ({ navigation, onLayoutRootView }) => {
     try {
       const userAuthenticated = await authApi.login(username, password);
 
-      Alert.alert(userAuthenticated.message);
+      showToast(userAuthenticated.message, "success");
 
       login();
     } catch (error) {
-      Alert.alert(error.message);
+      showToast(error.message, "error");
       return;
     }
 

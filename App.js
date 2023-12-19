@@ -7,7 +7,7 @@ import "react-native-gesture-handler";
 import { useFonts } from "expo-font";
 import { useCallback } from "react";
 import * as SplashScreen from "expo-splash-screen";
-// import { ToastProvider } from "react-native-toast-message";
+import Toast from "react-native-toast-message";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createDrawerNavigator } from "@react-navigation/drawer";
@@ -23,13 +23,14 @@ import ProfileScreen from "./app/screens/ProfileScreen";
 import SearchScreen from "./app/screens/SearchScreen";
 import PostDetailScreen from "./app/screens/PostDetailsScreen";
 
-// Api And Utils
+// Api
 import authApi from "./axios/auth";
 
 // Custom Components
 import NavigationBar from "./utils/NavigationBar";
 import NavigationDrawer from "./utils/NavigationDrawer";
-// import CustomToast from "./app/components/CustomToast";
+import { showToast } from "./utils/Utility";
+import storage from "./utils/storage";
 
 function AppContext() {
   const { isAuthenticated, login, logout } = useAuth();
@@ -41,8 +42,9 @@ function AppContext() {
 
   const fetchData = async () => {
     try {
-      const [userAuthenticated] = await Promise.all([
+      const [userAuthenticated, tokenCheck] = await Promise.all([
         authApi.isAuthenticated(),
+        authApi.checkToken(),
       ]);
 
       if (userAuthenticated) {
@@ -51,7 +53,7 @@ function AppContext() {
         logout();
       }
     } catch (error) {
-      console.error("Error fetching data:", error);
+      console.log(error);
     }
   };
 
@@ -155,13 +157,8 @@ function AppContext() {
 
 const App = () => (
   <AuthProvider>
-    {/* <ToastProvider
-      config={{
-        success: ({ text1 }) => <CustomToast message={text1} />,
-      }}
-    > */}
     <AppContext />
-    {/* </ToastProvider> */}
+    <Toast />
   </AuthProvider>
 );
 

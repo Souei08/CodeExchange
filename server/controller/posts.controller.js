@@ -4,7 +4,8 @@ export const getPosts = async (req, res) => {
   try {
     const getPosts = await Posts.find()
       .populate("owner")
-      .populate("comments.user");
+      .populate("comments.user")
+      .sort({ createdAt: -1 });
 
     res.status(200).json(getPosts);
   } catch (error) {
@@ -89,8 +90,9 @@ export const getOnePost = async (req, res) => {
 export const getOwnerPost = async (req, res) => {
   try {
     const ownerId = req.params.ownerId;
-
-    const getPosts = await Posts.find({ owner: ownerId }).populate("owner");
+    const getPosts = await Posts.find({ owner: ownerId })
+      .populate("owner")
+      .sort({ createdAt: -1 });
 
     res.status(200).json(getPosts);
   } catch (error) {

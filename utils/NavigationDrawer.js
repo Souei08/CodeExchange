@@ -6,9 +6,14 @@ import { SafeAreaView } from "react-native-safe-area-context";
 // Styles
 import drawerStyles from "../assets/css/drawer.css";
 
-// Api And Context
+// Context
 import { useAuth } from "../context/AuthContext";
+
+// Storage
 import storage from "./storage";
+
+// .env
+import { apiHeader } from "@env";
 
 const NavigationDrawer = ({ navigation }) => {
   const { logout, setUserVisit } = useAuth();
@@ -40,6 +45,12 @@ const NavigationDrawer = ({ navigation }) => {
     await storage.clearToken();
     await logout();
   };
+
+  const imageSource = authUser?.profileImage
+    ? {
+        uri: `${apiHeader}/${authUser?.profileImage}`,
+      }
+    : require("../assets/images/default/defaultProfile.jpg");
 
   return (
     <SafeAreaView style={{ backgroundColor: "#0C356A", flex: 1 }}>
@@ -74,7 +85,7 @@ const NavigationDrawer = ({ navigation }) => {
 
         <View style={drawerStyles.drawerProfileContainer}>
           <Image
-            source={require("../assets/images/default/defaultProfile.jpg")}
+            source={imageSource}
             style={drawerStyles.drawerProfilePicture}
           />
 
